@@ -1,0 +1,40 @@
+.gallery-page {
+  padding: 2rem 0;
+}
+
+.gallery-header {
+  margin-bottom: 2rem;
+}
+
+.gallery-header h1 {
+  color: var(--accent-color);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.gallery-header p {
+  font-size: 0.9rem;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  color: var(--border-color);
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #666;
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+}

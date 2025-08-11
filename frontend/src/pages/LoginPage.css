@@ -1,0 +1,51 @@
+.login-page {
+  padding: 4rem 0;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 200px);
+}
+
+.login-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.login-title {
+  color: var(--accent-color);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.login-card .form-label {
+  font-weight: 500;
+  color: var(--accent-color);
+}
+
+.login-card .form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(249, 201, 123, 0.25);
+}
+
+.login-card .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--accent-color);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.login-card .btn-primary:hover:not(:disabled) {
+  background-color: #f0b75d;
+  border-color: #f0b75d;
+}
+
+.login-card a {
+  color: var(--secondary-color);
+  transition: color 0.3s ease;
+}
+
+.login-card a:hover {
+  color: var(--accent-color);
+}

@@ -1,0 +1,84 @@
+.upload-page {
+  padding: 2rem 0;
+  background-color: #f8f9fa;
+}
+
+.upload-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.upload-title {
+  color: var(--accent-color);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.upload-preview-container {
+  width: 100%;
+  height: 240px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px dashed #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+}
+
+.upload-placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.upload-btn {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+.upload-btn:hover:not(:disabled) {
+  background-color: #f0b75d;
+  border-color: #f0b75d;
+}
+
+.upload-card .form-label {
+  font-weight: 500;
+  color: var(--accent-color);
+}
+
+.upload-card .form-control:focus,
+.upload-card .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(249, 201, 123, 0.25);
+}
+
+/* Progress bar styling */
+.progress {
+  height: 0.8rem;
+  border-radius: 0.5rem;
+}
+
+.progress-bar {
+  background-color: var(--primary-color);
+  color: var(--accent-color);
+  font-weight: 500;
+  font-size: 0.7rem;
+}

@@ -1,0 +1,72 @@
+.search-filters .card {
+  border-radius: 8px;
+  border-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.search-filters .form-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--accent-color);
+}
+
+.search-filters .form-select:focus,
+.search-filters .form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(249, 201, 123, 0.25);
+}
+
+.search-filters .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--accent-color);
+}
+
+.search-filters .btn-primary:hover {
+  background-color: #f0b75d;
+  border-color: #f0b75d;
+}
+
+.search-filters .btn-link {
+  color: var(--secondary-color);
+}
+
+/* Filter tags */
+.filter-tag {
+  display: inline-block;
+  background-color: rgba(249, 201, 123, 0.2);
+  color: var(--accent-color);
+  border-radius: 16px;
+  padding: 0.25rem 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.filter-tag .close-btn {
+  margin-left: 5px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.filter-tag .close-btn:hover {
+  opacity: 1;
+}
+
+/* Animation for filter panel */
+.collapse-enter {
+  max-height: 0;
+  overflow: hidden;
+}
+.collapse-enter-active {
+  max-height: 500px;
+  transition: max-height 300ms ease-in-out;
+}
+.collapse-exit {
+  max-height: 500px;
+}
+.collapse-exit-active {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease-in-out;
+}

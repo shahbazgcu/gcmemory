@@ -1,0 +1,91 @@
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 60px; /* Adjust for fixed navbar height */
+  padding-bottom: 40px;
+  background-color: var(--light-bg);
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--accent-color) !important;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #f0b75d !important;
+  border-color: #f0b75d !important;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
+}
+
+.btn-secondary:hover {
+  background-color: #7e1c1c !important;
+  border-color: #7e1c1c !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--accent-color) !important;
+}
+
+/* Card styles */
+.card {
+  box-shadow: var(--box-shadow);
+  transition: var(--hover-transition);
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Form controls */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(249, 201, 123, 0.25);
+}
+
+/* Page transitions */
+.page-transition-enter {
+  opacity: 0;
+}
+.page-transition-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.page-transition-exit {
+  opacity: 1;
+}
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Loading spinner */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.spinner-border {
+  color: var(--primary-color);
+}

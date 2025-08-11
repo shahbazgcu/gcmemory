@@ -1,0 +1,24 @@
+.custom-pagination .page-item .page-link {
+  color: var(--accent-color);
+  border-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.custom-pagination .page-item .page-link:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--accent-color);
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
