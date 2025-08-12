@@ -6,29 +6,15 @@ import ImageGallery from '../components/ImageGallery';
 import Pagination from '../components/Pagination';
 import './GalleryPage.css';
 
-const SearchFilters = ({ initialFilters, onFilterChange }) => {
+const SearchFilters = ({ initialFilters, onFilterChange, categories }) => {
   const [searchText, setSearchText] = useState(initialFilters.q || '');
   const [category_id, setCategoryId] = useState(initialFilters.category_id || '');
-  const [categories, setCategories] = useState([]);
 
   // Sync internal state with initialFilters whenever they change
   useEffect(() => {
     setSearchText(initialFilters.q || '');
     setCategoryId(initialFilters.category_id || '');
   }, [initialFilters.q, initialFilters.category_id]);
-
-  // Fetch categories once
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await api.get('/api/categories');
-        setCategories(res.data.categories);
-      } catch (error) {
-        console.error('Failed to fetch categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   // Debounce filter changes and apply min length logic
   useEffect(() => {
@@ -90,52 +76,93 @@ const GalleryPage = () => {
     limit: 20,
     pages: 1,
   });
+  const [categories, setCategories] = useState([]);
+  const [categoryDetails, setCategoryDetails] = useState(null);
 
   const query = searchParams.get('q') || '';
   const category_id = searchParams.get('category_id') || '';
   const page = parseInt(searchParams.get('page') || '1', 10);
 
-  // Memoize handleFilterChange so it doesn't trigger unnecessary effects
+  // Fetch categories once
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get('/api/categories');
+        setCategories(res.data.categories);
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch category details on category_id change
+  useEffect(() => {
+    if (!category_id) {
+      setCategoryDetails(null);
+      return;
+    }
+    const fetchCategoryDetails = async () => {
+      try {
+        console.log('Fetching category details for category_id:', category_id);
+        const res = await api.get(`/api/categories/${category_id}`);
+        setCategoryDetails(res.data.category);
+        console.log(res.data)
+        console.log(res.data.category)
+      } catch (error) {
+        console.error('Failed to fetch category details:', error);
+        setCategoryDetails(null);
+      }
+    };
+    fetchCategoryDetails();
+  }, [category_id]);
+
+  // Memoize handleFilterChange
   const handleFilterChange = useCallback((filters) => {
     const newParams = new URLSearchParams();
 
     if (filters.q) newParams.append('q', filters.q);
-    if (filters.category_id) {
-      newParams.append('category_id', filters.category_id);
-    }
+    if (filters.category_id) newParams.append('category_id', filters.category_id);
 
     newParams.append('page', '1'); // Reset page on filter change
 
-    console.log('Setting search params:', newParams.toString()); // DEBUG LOG
+    console.log('Setting search params:', newParams.toString());
     setSearchParams(newParams);
   }, [setSearchParams]);
 
+  // Fetch images on filters or page change
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
       setError(null);
 
       try {
+        // Always use the same endpoint but determine the logic based on parameters
         let endpoint = '/api/images';
         const params = new URLSearchParams();
 
+        // If we have a search query with minimum length, use search endpoint
         if (query && query.length >= 3) {
           endpoint = '/api/images/search';
           params.append('q', query);
         }
 
-        if (category_id) params.append('category_id', category_id);
+        // Always add category_id if it exists (works for both search and regular endpoints)
+        if (category_id) {
+          params.append('category_id', category_id);
+        }
 
         params.append('page', page.toString());
         params.append('limit', '20');
 
-        // DEBUG LOG
         console.log('Fetching images with:', endpoint, params.toString());
 
         const res = await api.get(`${endpoint}?${params.toString()}`);
 
-        setImages(res.data.images);
-        setPagination(res.data.pagination);
+        console.log('API Response:', res.data); // Debug log to see what backend returns
+
+        setImages(res.data.images || []);
+        setPagination(res.data.pagination || { total: 0, page: 1, limit: 20, pages: 1 });
       } catch (err) {
         console.error('Error fetching images:', err.response ? err.response.data : err.message);
         setError('Failed to load images. Please try again later.');
@@ -161,8 +188,8 @@ const GalleryPage = () => {
     if (query && query.length >= 3) {
       return `Search Results for "${query}"`;
     }
-    if (category_id) {
-      return 'Filtered Results';
+    if (category_id && categoryDetails) {
+      return `Images in "${categoryDetails.name}"`;
     }
     return 'Image Gallery';
   };
@@ -181,9 +208,18 @@ const GalleryPage = () => {
           )}
         </div>
 
+        {categoryDetails && (
+          <div className="category-details my-3 p-3 border rounded bg-light">
+            <h2>{categoryDetails.name}</h2>
+            <p>{categoryDetails.description}</p>
+            <small>Created at: {new Date(categoryDetails.created_at).toLocaleDateString()}</small>
+          </div>
+        )}
+
         <SearchFilters
           onFilterChange={handleFilterChange}
           initialFilters={{ q: query, category_id }}
+          categories={categories}
         />
 
         {error && (
@@ -200,7 +236,7 @@ const GalleryPage = () => {
           </div>
         ) : (
           <>
-            <ImageGallery images={images} />
+            <ImageGallery images={images} selectedCategoryId={category_id} />
 
             {pagination.total > 0 && (
               <Pagination
