@@ -173,10 +173,17 @@ class Memory {
     }
 
     // Apply filters
-    if (filters.category_id) {
-      sqlQuery += ' AND m.category_id = ?';
-      queryParams.push(filters.category_id);
-    }
+    // if (filters.category_id) {
+    //   sqlQuery += ' AND m.category_id = ?';
+    //   queryParams.push(filters.category_id);
+    // }
+
+    // Apply filters
+if (filters.category_id && filters.category_id !== 'all') {
+  sqlQuery += ' AND m.category_id = ?';
+  queryParams.push(filters.category_id);
+}
+
 
     if (filters.year) {
       sqlQuery += ' AND m.year = ?';

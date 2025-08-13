@@ -1,5 +1,5 @@
 const { pool } = require('../config/db');
-
+const db = require('../config/db');
 class Category {
   static async getAll() {
     const [rows] = await pool.query(
@@ -13,7 +13,12 @@ class Category {
       'SELECT * FROM categories WHERE id = ?',
       [id]
     );
+
     return rows.length ? rows[0] : null;
+    console.log(rows.length)
+    console.log(rows)
+    console.log(rows[0])
+
   }
 
   static async create(categoryData) {

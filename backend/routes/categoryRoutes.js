@@ -6,8 +6,8 @@ const router = express.Router();
 
 // Public routes
 router.get('/', categoryController.getAllCategories);
+router.get('/api/:id', categoryController.getCategoryById);
 router.get('/:id', categoryController.getCategoryById);
-
 // Admin routes
 router.post('/', authenticateToken, authorizeRole('admin'), categoryController.createCategory);
 router.put('/:id', authenticateToken, authorizeRole('admin'), categoryController.updateCategory);

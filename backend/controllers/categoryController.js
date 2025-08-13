@@ -15,6 +15,7 @@ exports.getAllCategories = async (req, res) => {
 exports.getCategoryById = async (req, res) => {
   try {
     const categoryId = req.params.id;
+    console.log('Category ID:', categoryId);
     const category = await Category.findById(categoryId);
     
     if (!category) {
