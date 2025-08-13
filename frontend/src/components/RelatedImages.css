@@ -1,9 +1,25 @@
+:root {
+  --color-accent: #b0b0b0;
+  /* muted medium gray */
+  --color-red: #922121;
+  --color-navy: #06014c;
+  --color-muted-text: #666666;
+  --color-light-bg: #f5f5f5;
+  /* light gray background */
+  --color-shadow-light: rgba(6, 1, 76, 0.1);
+  --color-shadow-dark: rgba(6, 1, 76, 0.15);
+  --color-red-light-bg: rgba(146, 33, 33, 0.1);
+}
+
 .related-images {
   margin-top: 2rem;
+  background-color: var(--color-light-bg);
+  padding: 1rem;
+  border-radius: 8px;
 }
 
 .related-images .related-title {
-  color: var(--accent-color);
+  color: var(--color-red);
   margin-bottom: 1rem;
   font-weight: 600;
   position: relative;
@@ -14,8 +30,9 @@
   display: block;
   width: 50px;
   height: 3px;
-  background-color: var(--primary-color);
+  background-color: var(--color-accent);
   margin-top: 5px;
+  border-radius: 2px;
 }
 
 .related-row {
@@ -33,17 +50,19 @@
   overflow: hidden;
   height: 100%;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--color-shadow-light);
+  background-color: white;
 }
 
 .related-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 15px var(--color-shadow-dark);
 }
 
 .related-img-container {
   height: 120px;
   overflow: hidden;
+  border-radius: 6px 6px 0 0;
 }
 
 .related-img {
@@ -67,7 +86,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--accent-color);
+  color: var(--color-red);
 }
 
 .related-body .related-title::after {
@@ -76,11 +95,12 @@
 
 .related-year {
   font-size: 0.8rem;
-  color: var(--secondary-color);
-  background-color: rgba(146, 33, 33, 0.1);
+  color: var(--color-red);
+  background-color: var(--color-red-light-bg);
   display: inline-block;
   padding: 1px 8px;
   border-radius: 10px;
+  font-weight: 600;
 }
 
 .related-link {
@@ -95,19 +115,19 @@
     margin-left: -5px;
     margin-right: -5px;
   }
-  
+
   .related-col {
     padding: 5px;
   }
-  
+
   .related-img-container {
     height: 100px;
   }
-  
+
   .related-body {
     padding: 0.5rem;
   }
-  
+
   .related-body .related-title {
     font-size: 0.8rem;
   }

@@ -1,22 +1,38 @@
+:root {
+  --color-primary: #E5C07B;
+  /* muted gold - peach replacement */
+  --color-red: #922121;
+  --color-navy: #06014c;
+  --color-light-gray: #ccc;
+  --color-muted-gray: #aaa;
+  --color-black: #000000;
+  --color-white: #ffffff;
+}
+
 .lightbox-modal .modal-content {
-  background-color: #000;
+  background-color: var(--color-black);
   border: none;
   border-radius: 8px;
+  color: var(--color-white);
 }
 
 .lightbox-modal .modal-header,
 .lightbox-modal .modal-footer {
   padding: 1rem 1.5rem;
+  border: none;
 }
 
 .lightbox-modal .modal-header .close {
-  color: white;
-  text-shadow: none;
+  color: var(--color-white);
   opacity: 0.8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
 .lightbox-modal .modal-header .close:hover {
   opacity: 1;
+  color: var(--color-primary);
 }
 
 .lightbox-carousel {
@@ -28,7 +44,7 @@
   justify-content: center;
   align-items: center;
   height: 70vh;
-  background-color: black;
+  background-color: var(--color-black);
   overflow: hidden;
 }
 
@@ -36,14 +52,22 @@
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+  user-select: none;
 }
 
 .carousel-arrow {
   font-size: 1.5rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(6, 1, 76, 0.6);
   padding: 1rem;
   border-radius: 50%;
-  color: white;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--color-primary);
+  color: var(--color-navy);
 }
 
 .lightbox-info {
@@ -52,55 +76,64 @@
 }
 
 .lightbox-info h5 {
-  color: var(--primary-color);
+  color: var(--color-primary);
   margin-bottom: 0.5rem;
 }
 
 .lightbox-info p {
-  color: #ccc;
+  color: var(--color-light-gray);
   font-size: 0.9rem;
-}
-
-.metadata-row {
-  margin-top: 0.5rem;
+  line-height: 1.3;
 }
 
 .metadata-item {
   font-size: 0.85rem;
-  color: #aaa;
+  color: var(--color-muted-gray);
   margin-bottom: 0.5rem;
 }
 
 .metadata-item strong {
-  color: var(--primary-color);
+  color: var(--color-primary);
 }
 
 .download-btn {
   margin-left: auto;
   margin-right: 0.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-navy);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Media queries */
+.download-btn:hover {
+  background-color: var(--color-red);
+  color: var(--color-primary);
+}
+
 @media (max-width: 767px) {
   .lightbox-img-container {
     height: 50vh;
   }
-  
+
   .lightbox-info {
     padding-right: 0;
     margin-bottom: 1rem;
   }
-  
+
   .modal-footer {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .download-btn {
     margin: 0 0 0.5rem;
     width: 100%;
   }
-  
+
   .close-btn {
     width: 100%;
   }

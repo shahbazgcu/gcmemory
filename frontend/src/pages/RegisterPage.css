@@ -1,51 +1,80 @@
+:root {
+  --color-peach: #f9c97b;
+  --color-red: #922121;
+  --color-navy: #06014c;
+  --color-light-bg: #fff7e6;
+  --color-muted-text: #4a4a4a;
+}
+
 .register-page {
   padding: 4rem 0;
-  background-color: #f8f9fa;
+  background-color: var(--color-light-bg);
   min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .register-card {
   border: none;
   border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 20px rgba(6, 1, 76, 0.1);
+  /* navy shadow */
   overflow: hidden;
   background-color: #fff;
+  max-width: 450px;
+  width: 100%;
+  padding: 2rem;
 }
 
 .register-title {
-  color: var(--accent-color);
+  color: var(--color-red);
   font-weight: 600;
   margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  text-align: center;
 }
 
 .register-card .form-label {
   font-weight: 500;
-  color: var(--accent-color);
+  color: var(--color-red);
 }
 
 .register-card .form-control:focus {
-  border-color: var(--primary-color);
+  border-color: var(--color-peach);
   box-shadow: 0 0 0 0.25rem rgba(249, 201, 123, 0.25);
+  outline: none;
 }
 
 .register-card .btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: var(--accent-color);
+  background-color: var(--color-peach);
+  border-color: var(--color-peach);
+  color: var(--color-navy);
   font-weight: 500;
   transition: all 0.3s ease;
+  width: 100%;
+  padding: 0.6rem 0;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .register-card .btn-primary:hover:not(:disabled) {
   background-color: #f0b75d;
+  /* darker peach */
   border-color: #f0b75d;
+  color: var(--color-navy);
 }
 
 .register-card a {
-  color: var(--secondary-color);
+  color: var(--color-navy);
   transition: color 0.3s ease;
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  text-decoration: none;
 }
 
 .register-card a:hover {
-  color: var(--accent-color);
+  color: var(--color-red);
+  text-decoration: underline;
 }

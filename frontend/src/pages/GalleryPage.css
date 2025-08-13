@@ -1,4 +1,4 @@
-.gallery-page {
+/* .gallery-page {
   padding: 2rem 0;
 }
 
@@ -37,4 +37,79 @@
   color: #666;
   max-width: 500px;
   margin: 0 auto 1.5rem;
+} */
+
+:root {
+  --color-peach: #f9c97b;
+  /* warm highlight */
+  --color-red: #922121;
+  /* strong accent */
+  --color-navy: #06014c;
+  /* dark base */
+  --color-light-bg: #fff7e6;
+  /* very light peachy background */
+  --color-muted-text: #555;
+  /* muted text */
+  --color-border: #922121;
+  /* border using red */
+}
+
+.gallery-page {
+  padding: 2rem 0;
+  background-color: var(--color-light-bg);
+  color: var(--color-navy);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.gallery-header {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--color-red);
+  padding-bottom: 0.5rem;
+}
+
+.gallery-header h1 {
+  color: var(--color-red);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.gallery-header p {
+  font-size: 0.95rem;
+  color: var(--color-navy);
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: var(--color-peach);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(146, 33, 33, 0.3);
+  color: var(--color-navy);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  color: var(--color-red);
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  color: var(--color-red);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.empty-state p {
+  color: var(--color-navy);
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+  font-weight: 600;
+  line-height: 1.5;
 }

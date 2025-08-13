@@ -1,3 +1,16 @@
+:root {
+  --primary-color: #922121;
+  /* deep red */
+  --secondary-color: #06014c;
+  /* navy */
+  --accent-color: #444444;
+  /* muted dark gray text */
+  --border-color: #b0b0b0;
+  /* soft gray borders */
+  --highlight-bg: rgba(146, 33, 33, 0.1);
+  /* red tint background */
+}
+
 .search-filters .card {
   border-radius: 8px;
   border-color: var(--border-color);
@@ -13,18 +26,18 @@
 .search-filters .form-select:focus,
 .search-filters .form-control:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(249, 201, 123, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(146, 33, 33, 0.25);
 }
 
 .search-filters .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
-  color: var(--accent-color);
+  color: white;
 }
 
 .search-filters .btn-primary:hover {
-  background-color: #f0b75d;
-  border-color: #f0b75d;
+  background-color: #b32f2f;
+  border-color: #b32f2f;
 }
 
 .search-filters .btn-link {
@@ -34,8 +47,8 @@
 /* Filter tags */
 .filter-tag {
   display: inline-block;
-  background-color: rgba(249, 201, 123, 0.2);
-  color: var(--accent-color);
+  background-color: var(--highlight-bg);
+  color: var(--primary-color);
   border-radius: 16px;
   padding: 0.25rem 0.75rem;
   margin-right: 0.5rem;
@@ -58,13 +71,16 @@
   max-height: 0;
   overflow: hidden;
 }
+
 .collapse-enter-active {
   max-height: 500px;
   transition: max-height 300ms ease-in-out;
 }
+
 .collapse-exit {
   max-height: 500px;
 }
+
 .collapse-exit-active {
   max-height: 0;
   overflow: hidden;

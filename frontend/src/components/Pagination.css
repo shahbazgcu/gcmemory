@@ -1,24 +1,38 @@
+:root {
+  --color-peach: #E5C07B;
+  /* soft muted gold */
+  --color-red: #922121;
+  --color-navy: #06014c;
+  --color-border: #ccc;
+  --color-muted: #6c757d;
+  --color-light-bg: #fff;
+  --color-light-border: #dee2e6;
+}
+
+/* Pagination styling */
 .custom-pagination .page-item .page-link {
-  color: var(--accent-color);
-  border-color: var(--border-color);
+  color: var(--color-red);
+  border-color: var(--color-border);
   transition: all 0.3s ease;
+  background-color: var(--color-light-bg);
 }
 
 .custom-pagination .page-item .page-link:hover {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: var(--accent-color);
+  background-color: var(--color-peach);
+  border-color: var(--color-peach);
+  color: var(--color-navy);
 }
 
 .custom-pagination .page-item.active .page-link {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  color: white;
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  color: var(--color-light-bg);
+  font-weight: 600;
 }
 
 .custom-pagination .page-item.disabled .page-link {
-  color: #6c757d;
+  color: var(--color-muted);
   pointer-events: none;
-  background-color: #fff;
-  border-color: #dee2e6;
+  background-color: var(--color-light-bg);
+  border-color: var(--color-light-border);
 }

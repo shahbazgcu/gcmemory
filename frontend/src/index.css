@@ -1,12 +1,23 @@
 :root {
-  --primary-color: #f9c97b;
-  --secondary-color: #922121;
-  --accent-color: #06014c;
-  --light-bg: #f8f9fa;
-  --dark-text: #333;
-  --light-text: #fff;
-  --border-color: #e0e0e0;
-  --box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  /* Core theme colors */
+  --color-peach: #E5C07B;
+  /* soft muted gold */
+  --color-red: #922121;
+  /* deep red */
+  --color-navy: #06014c;
+  /* dark navy */
+
+  /* Text & background */
+  --color-light-bg: #f8f9fa;
+  --color-dark-text: #333333;
+  --color-light-text: #ffffff;
+
+  /* Borders & shadows */
+  --color-border: #e0e0e0;
+  --color-light-border: #dee2e6;
+  --color-shadow: 0 0.25rem 0.75rem rgba(6, 1, 76, 0.1);
+
+  /* Transitions */
   --hover-transition: all 0.3s ease-in-out;
 }
 
@@ -18,19 +29,19 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--light-bg);
-  color: var(--dark-text);
+  background-color: var(--color-light-bg);
+  color: var(--color-dark-text);
   line-height: 1.6;
 }
 
 a {
-  color: var(--secondary-color);
+  color: var(--color-red);
   text-decoration: none;
   transition: var(--hover-transition);
 }
 
 a:hover {
-  color: var(--accent-color);
+  color: var(--color-navy);
 }
 
 /* Custom scrollbar */
@@ -40,14 +51,14 @@ a:hover {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--light-bg);
+  background: var(--color-light-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
+  background: var(--color-peach);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary-color);
+  background: var(--color-red);
 }
