@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Form, Button, Spinner, Alert, ProgressBar, Row, Col, Image } from 'react-bootstrap';
 import api from '../../utils/api';
 
-const EditImage = ({ image, onClose, onEditSuccess }) => {
+const EditImage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const id = image?.id;
 
   const [imageData, setImageData] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // For image upload & preview
   const [newImageFile, setNewImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  // Year options similar to UploadPage
   const [yearOptions, setYearOptions] = useState([]);
 
-  // Generate year dropdown options
   useEffect(() => {
+    // Generate year options (current year down to 1864)
     const currentYear = new Date().getFullYear();
     const years = [];
     for (let year = currentYear; year >= 1864; year--) {
@@ -27,23 +30,16 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
     setYearOptions(years);
   }, []);
 
-  // Load image and categories
   useEffect(() => {
-    if (!id) {
-      setError('No image selected.');
-      setLoading(false);
-      return;
-    }
-
     fetchImage();
     fetchCategories();
-  }, [id]);
+  }, []);
 
   const fetchImage = async () => {
     try {
       const res = await api.get(`/api/images/${id}`);
       setImageData(res.data.image);
-      if (res.data.image.thumbnail_path) {
+      if(res.data.image.thumbnail_path) {
         setPreviewUrl(process.env.REACT_APP_API_URL + res.data.image.thumbnail_path);
       }
       setError(null);
@@ -71,6 +67,7 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Optional: Validate file type & size like UploadPage
       if (!file.type.match('image.*')) {
         setError('Please select a valid image file (JPEG, PNG, etc.)');
         return;
@@ -87,17 +84,17 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!imageData?.id) {
-      setError('Image data missing.');
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
     try {
+      let formData;
+
       if (newImageFile) {
-        const formData = new FormData();
+        // If a new image is selected, upload as multipart/form-data
+        formData = new FormData();
+
+        // Append all editable fields
         formData.append('title', imageData.title || '');
         formData.append('description', imageData.description || '');
         formData.append('category_id', imageData.category_id || '');
@@ -109,13 +106,16 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
         formData.append('image', newImageFile);
 
         await api.put(`/api/images/${id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
           onUploadProgress: (progressEvent) => {
             const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
             setUploadProgress(progress);
           }
         });
       } else {
+        // No new image file, send JSON
         await api.put(`/api/images/${id}`, {
           title: imageData.title,
           description: imageData.description,
@@ -128,11 +128,7 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
         });
       }
 
-      if (onEditSuccess) {
-        onEditSuccess();
-      } else {
-        navigate('/admin/images');
-      }
+      navigate('/admin/images'); // Redirect after success
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Failed to update image.');
@@ -160,34 +156,29 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col md={7}>
-              {/* Text Inputs */}
-              {[
-                { name: 'title', label: 'Title *', required: true },
-                { name: 'description', label: 'Description', as: 'textarea', rows: 3 },
-                { name: 'location', label: 'Location' },
-                { name: 'department', label: 'Department' },
-                { name: 'source', label: 'Source' },
-                { name: 'keywords', label: 'Keywords *', required: true, hint: 'Enter keywords separated by commas' }
-              ].map(field => (
-                <Form.Group key={field.name} className="mb-3" controlId={field.name}>
-                  <Form.Label>{field.label}</Form.Label>
-                  <Form.Control
-                    as={field.as || 'input'}
-                    type="text"
-                    rows={field.rows || undefined}
-                    name={field.name}
-                    value={imageData[field.name] || ''}
-                    onChange={handleChange}
-                    required={field.required}
-                  />
-                  {field.hint && (
-                    <Form.Text className="text-muted">{field.hint}</Form.Text>
-                  )}
-                </Form.Group>
-              ))}
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label>Title *</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={imageData.title || ''}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
 
-              {/* Category Select */}
-              <Form.Group className="mb-3" controlId="category_id">
+              <Form.Group className="mb-3" controlId="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  value={imageData.description || ''}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="category">
                 <Form.Label>Category *</Form.Label>
                 <Form.Select
                   name="category_id"
@@ -202,7 +193,6 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
                 </Form.Select>
               </Form.Group>
 
-              {/* Year Select */}
               <Form.Group className="mb-3" controlId="year">
                 <Form.Label>Year</Form.Label>
                 <Form.Select
@@ -216,10 +206,53 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
                   ))}
                 </Form.Select>
               </Form.Group>
+
+              <Form.Group className="mb-3" controlId="location">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="location"
+                  value={imageData.location || ''}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="department">
+                <Form.Label>Department</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="department"
+                  value={imageData.department || ''}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="source">
+                <Form.Label>Source</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="source"
+                  value={imageData.source || ''}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="keywords">
+                <Form.Label>Keywords *</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="keywords"
+                  value={imageData.keywords || ''}
+                  onChange={handleChange}
+                  required
+                />
+                <Form.Text className="text-muted">
+                  Enter keywords separated by commas
+                </Form.Text>
+              </Form.Group>
             </Col>
 
             <Col md={5}>
-              {/* Image Upload + Preview */}
               <Form.Group className="mb-3" controlId="imageFile">
                 <Form.Label>Replace Image</Form.Label>
                 {previewUrl ? (
@@ -249,22 +282,15 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
             </Col>
           </Row>
 
-          <div className="d-flex gap-2">
-            <Button type="submit" variant="primary" disabled={loading}>
-              {loading ? (
-                <>
-                  <Spinner animation="border" size="sm" className="me-2" /> Saving...
-                </>
-              ) : (
-                'Save Changes'
-              )}
-            </Button>
-            {onClose && (
-              <Button variant="secondary" onClick={onClose}>
-                Cancel
-              </Button>
+          <Button type="submit" variant="primary" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner animation="border" size="sm" className="me-2" /> Saving...
+              </>
+            ) : (
+              'Save Changes'
             )}
-          </div>
+          </Button>
         </Form>
       )}
     </div>

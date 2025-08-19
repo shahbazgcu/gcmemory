@@ -1,5 +1,3 @@
-// AdminDashboard.js
-
 import React, { useState } from 'react';
 import { Container, Row, Col, Nav, Alert } from 'react-bootstrap';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
@@ -16,7 +14,6 @@ import AdminImages from './AdminImages';
 import AdminCategories from './AdminCategories';
 import AdminUsers from './AdminUsers';
 import UploadImage from '../UploadPage';
-import AdminImageView from './AdminImageView';
 
 import './AdminDashboard.css';
 
@@ -24,17 +21,27 @@ const AdminDashboard = () => {
   const location = useLocation();
   const [message, setMessage] = useState(location.state?.message || '');
 
+  // Determine active tab based on the current path
   const getActiveKey = () => {
-    const path = location.pathname;
+    const path = location.pathname.split('/').pop();
 
-    if (path.startsWith('/admin/images')) return 'images';
-    if (path.startsWith('/admin/categories')) return 'categories';
-    if (path.startsWith('/admin/users')) return 'users';
-    if (path.startsWith('/admin/upload')) return 'upload';
-    return 'overview';
+    switch (path) {
+      case 'images':
+        return 'images';
+      case 'categories':
+        return 'categories';
+      case 'users':
+        return 'users';
+      case 'upload':
+        return 'upload';
+      default:
+        return 'overview';
+    }
   };
 
-  const clearMessage = () => setMessage('');
+  const clearMessage = () => {
+    setMessage('');
+  };
 
   return (
     <div className="admin-dashboard">
@@ -79,15 +86,6 @@ const AdminDashboard = () => {
               <Nav.Item>
                 <Nav.Link
                   as={Link}
-                  to="/admin/upload"
-                  className={getActiveKey() === 'upload' ? 'active' : ''}
-                >
-                  <FaUpload className="me-2" /> Upload Image
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  as={Link}
                   to="/admin/categories"
                   className={getActiveKey() === 'categories' ? 'active' : ''}
                 >
@@ -103,6 +101,15 @@ const AdminDashboard = () => {
                   <FaUsers className="me-2" /> Users
                 </Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  as={Link}
+                  to="/admin/upload"
+                  className={getActiveKey() === 'upload' ? 'active' : ''}
+                >
+                  <FaUpload className="me-2" /> Upload Image
+                </Nav.Link>
+              </Nav.Item>
             </Nav>
           </Col>
 
@@ -111,10 +118,9 @@ const AdminDashboard = () => {
               <Routes>
                 <Route index element={<AdminOverview />} />
                 <Route path="images" element={<AdminImages />} />
-                <Route path="images/:id" element={<AdminImageView />} />
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="users" element={<AdminUsers />} />
-                <Route path="upload" element={<UploadImage />} />
+                <Route path="upload" element={<UploadImage />} /> {/* ✅ Upload route */}
               </Routes>
             </div>
           </Col>

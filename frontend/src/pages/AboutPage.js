@@ -1,14 +1,16 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-// import './AboutPage.css';  // Optional CSS file if you want to style the page
+import aboutImg1 from "../assets/about1.jpg";
+import aboutImg2 from "../assets/about2.jpg";
 
 const AboutPage = () => {
   return (
     <section className="about-page">
       <Container className="my-5">
+        {/* First Row */}
         <Row className="align-items-center mb-5">
-          <Col md={6}>
+          <Col md={7}>
             <h2>About Government College University (GCU)</h2>
             <p>
               Established in 1864, Government College University (GCU) Lahore is
@@ -23,17 +25,18 @@ const AboutPage = () => {
               cultural fabric of the nation.
             </p>
           </Col>
-          <Col md={6}>
-            {/* <img
-              src="/assets/about-archive.jpg"  // Adjust path or import image for React projects
+          <Col md={5}>
+            <img
+              src={aboutImg1}
               alt="Government College University"
               className="img-fluid rounded shadow about-image"
-            /> */}
+            />
           </Col>
         </Row>
 
+        {/* Second Row */}
         <Row className="align-items-center">
-          <Col md={6} className="order-md-2 mb-4 mb-md-0">
+          <Col md={7} className="order-md-2 mb-4 mb-md-0">
             <h2>About the GCU Memories Archive Portal</h2>
             <p>
               The GCU Memories Archive Portal is dedicated to collecting,
@@ -43,19 +46,20 @@ const AboutPage = () => {
             </p>
             <p>
               It invites students, alumni, faculty, and the public to explore
-              and contribute to the university’s legacy. Whether it’s a
+               to the university’s legacy. Whether it’s a
               black-and-white snapshot from the 1950s or a student event from
               recent years, every memory matters.
             </p>
             <Link to="/gallery">
               <Button variant="primary">Explore the Archive</Button>
-            </Link>          </Col>
-          <Col md={6} className="order-md-1">
-            {/* <img
-              src="/assets/gcu-campus.jpg"  // Adjust path or import image for React projects
+            </Link>
+          </Col>
+          <Col md={5} className="order-md-1">
+            <img
+              src={aboutImg2}
               alt="GCU Archive"
               className="img-fluid rounded shadow"
-            /> */}
+            />
           </Col>
         </Row>
       </Container>

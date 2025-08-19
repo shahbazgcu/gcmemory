@@ -20,6 +20,7 @@
   /* navy shadow */
   overflow: hidden;
   background-color: #fff;
+  max-width: 600px;
   margin: 0 auto;
   padding: 1.5rem;
 }

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -16,9 +16,21 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import NotFound from './pages/NotFound';
 import EditImage from './pages/admin/EditImage';
+import AuthContext from './context/AuthContext'; // 👈 import AuthContext
 import './App.css';
 
 function App() {
+  const { user, isAuthenticated, loading } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+  
+    // 👇 Redirect to admin dashboard if authenticated admin opens the app
+    useEffect(() => {
+      if (!loading && isAuthenticated && user?.role === 'admin' && location.pathname === '/') {
+        navigate('/admin');
+      }
+    }, [loading, isAuthenticated, user, navigate, location]);
+  
   return (
     <div className="app-wrapper">
       <Header />

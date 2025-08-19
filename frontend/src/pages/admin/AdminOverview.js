@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Alert, Spinner } from 'react-bootstrap';
-import { FaUsers, FaImages, FaFolderOpen, FaCalendarAlt } from 'react-icons/fa';
+import { FaImages, FaFolderOpen, FaCalendarAlt } from 'react-icons/fa';
 import api from '../../utils/api';
+import './AdminOverview.css';
 
 const AdminOverview = () => {
   const [stats, setStats] = useState({
@@ -16,30 +17,32 @@ const AdminOverview = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // For demonstration purposes, we're using actual API calls
-        // In a real app, you might have a dedicated endpoint for admin stats
-        
-        // Get total images
-        const imagesRes = await api.get('/api/images?limit=1');
-        
+        // Get all images (or a large enough number to cover recent uploads)
+        const imagesRes = await api.get('/api/images?limit=1000');
+        const images = imagesRes.data.images || [];
+
         // Get total users
         const usersRes = await api.get('/api/auth/users');
-        
+
         // Get categories
         const categoriesRes = await api.get('/api/categories');
-        
+
         // Get recent uploads (last 7 days)
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        
-        // Calculate stats
+
+        const recentUploads = images.filter(img => {
+          const uploadedAt = new Date(img.created_at);
+          return uploadedAt >= sevenDaysAgo;
+        }).length;
+
         setStats({
-          totalImages: imagesRes.data.pagination?.total || 0,
+          totalImages: imagesRes.data.pagination?.total || images.length,
           totalUsers: usersRes.data.users?.length || 0,
           totalCategories: categoriesRes.data.categories?.length || 0,
-          recentUploads: 0  // In a real app, this would come from a dedicated endpoint
+          recentUploads
         });
-        
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching admin stats:', err);
@@ -71,7 +74,7 @@ const AdminOverview = () => {
     <div className="admin-overview">
       <h2 className="mb-4">Dashboard Overview</h2>
       
-      <Row>
+      <Row className="overview-row">
         <Col lg={3} md={6} className="mb-4">
           <Card className="admin-card admin-images-card">
             <Card.Body>
@@ -82,15 +85,7 @@ const AdminOverview = () => {
           </Card>
         </Col>
         
-        <Col lg={3} md={6} className="mb-4">
-          <Card className="admin-card admin-users-card">
-            <Card.Body>
-              <FaUsers className="admin-card-icon" />
-              <div className="admin-card-count">{stats.totalUsers}</div>
-              <div className="admin-card-title">Registered Users</div>
-            </Card.Body>
-          </Card>
-        </Col>
+        
         
         <Col lg={3} md={6} className="mb-4">
           <Card className="admin-card admin-categories-card">
@@ -113,18 +108,6 @@ const AdminOverview = () => {
         </Col>
       </Row>
       
-      <Row className="mt-4">
-        <Col>
-          <Card>
-            <Card.Header>Recent Activities</Card.Header>
-            <Card.Body>
-              <p className="text-muted text-center py-4">
-                Activity tracking will be implemented in future updates.
-              </p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
     </div>
   );
 };

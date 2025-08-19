@@ -1,43 +1,46 @@
 import React, { useContext } from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
-import { FaUpload, FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaCog } from 'react-icons/fa';
+import { FaUpload, FaUser, FaSignInAlt,  FaSignOutAlt } from 'react-icons/fa';
 import AuthContext from '../context/AuthContext';
 import logo from '../assets/logo.png'; // Adjust the path as necessary
 
 const Header = () => {
-  const { user, isAuthenticated, isAdmin, logout } = useContext(AuthContext);
-
+  const { user, isAuthenticated, logout } = useContext(AuthContext);
+  // Use '/admin' for admins, '/' for others
+  const logoLink = user?.role === 'admin' ? "/admin/" : "/";
 
   return (
     <Navbar bg="light" expand="lg" fixed="top" className="shadow-sm">
       <Container>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to={logoLink} className="logo">
           <img 
             src={logo} 
             alt="GCU Memories" 
-            height="40" 
+            height="50" 
             className="d-inline-block align-top me-2" 
           />
-          <span className="fw-bold text-primary">GCU Memories</span>
+          {/* <span className="fw-bold text-primary">GCU Memories</span> */}
         </Navbar.Brand>
         
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={NavLink} to="/" className="mx-2">Home</Nav.Link>
+             {/* Only show Gallery link if NOT admin */}
+              {user?.role !== 'admin' && (
+                <>  
+              <Nav.Link as={NavLink} to="/" className="mx-2">Home</Nav.Link>
              <Nav.Link as={NavLink} to="/about" className="mx-2">About</Nav.Link>
-            <Nav.Link as={NavLink} to="/gallery" className="mx-2">Gallery</Nav.Link>
-            {isAuthenticated && (
+             <Nav.Link as={NavLink} to="/gallery" className="mx-2">Gallery</Nav.Link>
+             </>
+              )}
+
+            {/* {isAuthenticated && (
               <Nav.Link as={NavLink} to="/upload" className="mx-2">
                 <FaUpload className="me-1" /> Upload
               </Nav.Link>
-            )}
-            {isAdmin && (
-              <Nav.Link as={NavLink} to="/admin" className="mx-2">
-                <FaCog className="me-1" /> Admin
-              </Nav.Link>
-            )}
+            )} */}
+            
           </Nav>
 
           {/* Search bar removed here */}
@@ -63,9 +66,9 @@ const Header = () => {
                 <Nav.Link as={Link} to="/login" className="mx-1">
                   <FaSignInAlt className="me-1" /> Login
                 </Nav.Link>
-                <Nav.Link as={Link} to="/register" className="mx-1">
+                {/* <Nav.Link as={Link} to="/register" className="mx-1">
                   <FaUserPlus className="me-1" /> Register
-                </Nav.Link>
+                </Nav.Link> */}
               </>
             )}
           </Nav>

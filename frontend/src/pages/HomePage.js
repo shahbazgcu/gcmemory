@@ -14,7 +14,7 @@ const HomePage = () => {
   const [heroImages, setHeroImages] = useState([]);
 
   useEffect(() => {
-    const heroImageIds = [1, 3, 4, 5]; // Customize these IDs based on your database
+    const heroImageIds = [1, 7, 4, 5]; // Customize these IDs based on your database
 
     const fetchHeroImages = async () => {
       try {
@@ -69,7 +69,6 @@ const HomePage = () => {
         <Container>
           <Row className="align-items-center py-5">
             <Col md={8} className="mb-4 mb-md-0">
-              <h1 className="hero-title">GCU Memories Archive Portal</h1>
               <p className="hero-subtitle">
                 Archiving the Past, Preserving the Future.
               </p>
@@ -168,7 +167,9 @@ const HomePage = () => {
                 to explore, contribute to, and celebrate the heritage of one of
                 Pakistan's oldest and most prestigious educational institutions.
               </p>
-              <Button variant="outline-primary">Learn More</Button>
+              <Link to="/about">
+                <Button  variant="primary">Learn More</Button>
+              </Link>
             </Col>
             <Col md={6}>
               <div className="p-5">

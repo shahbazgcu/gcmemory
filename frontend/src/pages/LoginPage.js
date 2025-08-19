@@ -13,17 +13,21 @@ const LoginPage = () => {
   const [validated, setValidated] = useState(false);
   const [localError, setLocalError] = useState('');
   
-  const { login, loading, error, clearError, isAuthenticated } = useContext(AuthContext);
+  const { login, loading, error, clearError, isAuthenticated, user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated) {
-      const redirectPath = location.state?.from || '/';
-      navigate(redirectPath);
+      if (user && user.role === 'admin') {
+        navigate('/admin/');
+      } else {
+        const redirectPath = location.state?.from || '/';
+        navigate(redirectPath);
+      }
     }
-  }, [isAuthenticated, navigate, location.state]);
+  }, [isAuthenticated, navigate, location.state, user]);
   
   // Clear any auth context errors when component mounts or unmounts
   useEffect(() => {

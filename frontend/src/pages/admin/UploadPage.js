@@ -10,7 +10,6 @@ import {
   Spinner,
   ProgressBar,
 } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import { FaUpload, FaImage } from "react-icons/fa";
 import api from "../utils/api";
 import AuthContext from "../context/AuthContext";
@@ -18,9 +17,7 @@ import "./UploadPage.css";
 
 const UploadPage = () => {
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
 
-  // Form state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -37,23 +34,20 @@ const UploadPage = () => {
   const [categories, setCategories] = useState([]);
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [yearOptions, setYearOptions] = useState([]);
 
-  // Generate year options (current year down to 1900)
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const years = [];
-
     for (let year = currentYear; year >= 1864; year--) {
       years.push(year);
     }
-
     setYearOptions(years);
   }, []);
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -64,11 +58,9 @@ const UploadPage = () => {
         setError("Failed to load categories. Please refresh the page.");
       }
     };
-
     fetchCategories();
   }, []);
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -76,18 +68,14 @@ const UploadPage = () => {
     });
   };
 
-  // Handle image file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     if (file) {
-      // Check file type
       if (!file.type.match("image.*")) {
         setError("Please select an image file (JPEG, PNG, etc.)");
         return;
       }
 
-      // Check file size (max 3MB)
       if (file.size > 3 * 1024 * 1024) {
         setError("Image size should not exceed 3MB");
         return;
@@ -99,7 +87,6 @@ const UploadPage = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -118,13 +105,13 @@ const UploadPage = () => {
     setValidated(true);
     setLoading(true);
     setUploadProgress(0);
+    setError(null);
+    setSuccessMessage(null);
 
     try {
-      // Create form data for file upload
       const uploadData = new FormData();
       uploadData.append("image", imageFile);
       uploadData.append("title", formData.title);
-
       if (formData.description)
         uploadData.append("description", formData.description);
       if (formData.category_id)
@@ -136,8 +123,7 @@ const UploadPage = () => {
       if (formData.source) uploadData.append("source", formData.source);
       if (formData.keywords) uploadData.append("keywords", formData.keywords);
 
-      // Upload with progress tracking
-      const res = await api.post("/api/images", uploadData, {
+      await api.post("/api/images", uploadData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -149,30 +135,44 @@ const UploadPage = () => {
         },
       });
 
-      // Navigate to the newly uploaded image
-      navigate(`/images/${res.data.imageId}`, {
-        state: { message: "Image uploaded successfully." },
+      setSuccessMessage("Image uploaded successfully.");
+
+      setFormData({
+        title: "",
+        description: "",
+        category_id: "",
+        year: "",
+        location: "",
+        department: "",
+        source: "",
+        keywords: "",
       });
+      setImageFile(null);
+      setPreviewUrl("");
+      setValidated(false);
+      setUploadProgress(0);
+      setLoading(false);
+
+      // Optional: auto-hide success after a few seconds
+      // setTimeout(() => setSuccessMessage(null), 3000);
+
     } catch (err) {
       console.error("Error uploading image:", err);
-
       setError(
         err.response?.data?.message ||
           "Failed to upload image. Please try again."
       );
-
       setLoading(false);
     }
   };
 
   return (
-    
-    <div className="admin-upload">
+    <div className="upload-page">
       <Container>
         <Row className="justify-content-center">
-          <Col md={12} lg={12}>
+          <Col md={10} lg={8}>
             <Card className="upload-card">
-              <Card.Body className="p-2 p-md-5">
+              <Card.Body className="p-4 p-md-5">
                 <div className="text-center mb-4">
                   <h2 className="upload-title">
                     <FaUpload className="me-2" /> Upload Memory
@@ -388,6 +388,13 @@ const UploadPage = () => {
                       )}
                     </Button>
                   </div>
+
+                  {/* ✅ Success message displayed under the button */}
+                  {successMessage && (
+                    <Alert variant="success" className="mt-3">
+                      {successMessage}
+                    </Alert>
+                  )}
                 </Form>
               </Card.Body>
             </Card>

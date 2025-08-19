@@ -1,0 +1,75 @@
+.admin-image-view {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.image-view-header {
+  position: relative;
+  padding-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.image-view-header h2 {
+  margin: 0;
+}
+
+.image-view-back-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #6c757d;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.image-view-back-button:hover {
+  background-color: #5a6268;
+}
+
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.image-preview-container img {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.image-details {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.image-details dt {
+  font-weight: 600;
+  color: #333;
+  margin-top: 1rem;
+}
+
+.image-details dd {
+  margin-left: 0;
+  margin-bottom: 1rem;
+}
+
+.image-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.image-actions .btn {
+  padding: 8px 16px;
+}

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form, Row, Col, Spinner, Alert, Image, Modal } from 'react-bootstrap';
-import { FaEye, FaTrashAlt, FaSearch, FaEdit } from 'react-icons/fa';
+import { Table, Button, Form, Row, Col, Spinner, Alert, Image } from 'react-bootstrap';
+import { FaEye, FaTrashAlt, FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import Pagination from '../../components/Pagination';
-import EditImage from './EditImage'; 
 
 const AdminImages = () => {
   const [images, setImages] = useState([]);
@@ -17,23 +16,19 @@ const AdminImages = () => {
     limit: 10,
     pages: 1
   });
-
+  
   const [filters, setFilters] = useState({
     q: '',
     category_id: '',
     year: ''
   });
-
-  // Modal state
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  // Fetch categories on mount
+  
+  // Fetch data when component mounts
   useEffect(() => {
     fetchCategories();
     fetchImages(1);
   }, []);
-
+  
   // Fetch categories
   const fetchCategories = async () => {
     try {
@@ -43,23 +38,23 @@ const AdminImages = () => {
       console.error('Error fetching categories:', err);
     }
   };
-
-  // Fetch images with filters and pagination
+  
+  // Fetch images with pagination and filters
   const fetchImages = async (page = 1) => {
     try {
       setLoading(true);
-
+      
       const params = new URLSearchParams();
       params.append('page', page);
       params.append('limit', 10);
-
+      
       if (filters.q) params.append('q', filters.q);
       if (filters.category_id) params.append('category_id', filters.category_id);
       if (filters.year) params.append('year', filters.year);
-
+      
       const endpoint = filters.q ? '/api/images/search' : '/api/images';
       const res = await api.get(`${endpoint}?${params.toString()}`);
-
+      
       setImages(res.data.images);
       setPagination(res.data.pagination);
       setError(null);
@@ -70,14 +65,8 @@ const AdminImages = () => {
       setLoading(false);
     }
   };
-
-  // Format date
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  // Handle filter input changes
+  
+  // Handle input change in filters
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({
@@ -85,56 +74,46 @@ const AdminImages = () => {
       [name]: value
     }));
   };
-
-  // On filter form submit
+  
+  // Handle filter form submission
   const handleFilterSubmit = (e) => {
     e.preventDefault();
-    fetchImages(1); // reset to first page
+    fetchImages(1); // Reset to first page when filters change
   };
-
-  // Pagination change handler
+  
+  // Handle page change
   const handlePageChange = (page) => {
     fetchImages(page);
   };
-
-  // Delete image
+  
+  // Handle delete image
   const handleDeleteClick = async (imageId) => {
     if (!window.confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
       return;
     }
-
+    
     try {
       setLoading(true);
       await api.delete(`/api/images/${imageId}`);
+      
+      // Refresh images list
       await fetchImages(pagination.page);
       setError(null);
     } catch (err) {
       console.error('Error deleting image:', err);
       setError(
-        err.response?.data?.message ||
+        err.response?.data?.message || 
         'Failed to delete image. Please try again.'
       );
     } finally {
       setLoading(false);
     }
   };
-
-  // Open edit modal
-  const handleEditClick = (image) => {
-    setSelectedImage(image);
-    setShowEditModal(true);
-  };
-
-  // Close edit modal
-  const handleCloseModal = () => {
-    setShowEditModal(false);
-    setSelectedImage(null);
-  };
-
-  // After successful edit, refresh list & close modal
-  const handleAfterEdit = () => {
-    fetchImages(pagination.page);
-    handleCloseModal();
+  
+  // Format date
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   return (
@@ -142,7 +121,7 @@ const AdminImages = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Manage Images</h2>
       </div>
-
+      
       {/* Filter Section */}
       <div className="filter-section mb-4">
         <Form onSubmit={handleFilterSubmit}>
@@ -182,15 +161,15 @@ const AdminImages = () => {
                   name="year"
                   value={filters.year}
                   onChange={handleFilterChange}
-                  min="1800"
+                  min="1900"
                   max={new Date().getFullYear()}
                 />
               </Form.Group>
             </Col>
             <Col md={2}>
-              <Button
-                variant="primary"
-                type="submit"
+              <Button 
+                variant="primary" 
+                type="submit" 
                 className="w-100"
                 disabled={loading}
               >
@@ -200,13 +179,13 @@ const AdminImages = () => {
           </Row>
         </Form>
       </div>
-
+      
       {error && (
         <Alert variant="danger" className="mb-4">
           {error}
         </Alert>
       )}
-
+      
       {loading && images.length === 0 ? (
         <div className="text-center py-5">
           <Spinner animation="border" role="status" variant="primary">
@@ -221,24 +200,17 @@ const AdminImages = () => {
                 <th>Image</th>
                 <th>Title</th>
                 <th>Category</th>
-                {/* <th>Uploader</th>
-                <th>Date</th> */}
+                <th>Uploader</th>
+                <th>Date</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {images.length === 0 && (
-                <tr>
-                  <td colSpan="6" className="text-center">
-                    No images found
-                  </td>
-                </tr>
-              )}
               {images.map(image => (
                 <tr key={image.id}>
                   <td style={{ width: '100px' }}>
-                    <Image
-                      src={process.env.REACT_APP_API_URL + image.thumbnail_path}
+                    <Image 
+                      src={process.env.REACT_APP_API_URL + image.thumbnail_path} 
                       alt={image.title}
                       thumbnail
                       style={{ maxWidth: '80px', maxHeight: '60px' }}
@@ -250,25 +222,19 @@ const AdminImages = () => {
                   </td>
                   <td>{image.title}</td>
                   <td>{image.category_name || '-'}</td>
-                  {/* <td>{image.uploader_name || 'Anonymous'}</td> */}
-                  {/* <td>{formatDate(image.created_at)}</td> */}
+                  <td>{image.uploader_name || 'Anonymous'}</td>
+                  <td>{formatDate(image.created_at)}</td>
                   <td>
-                    <Link
-                      to={`/admin/images/${image.id}`}
+                    <Link 
+                      to={`/images/${image.id}`} 
                       className="btn btn-outline-secondary btn-sm me-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <FaEye />
                     </Link>
-                    <Button
-                      variant="outline-primary"
-                      size="sm"
-                      className="me-2"
-                      onClick={() => handleEditClick(image)}
-                    >
-                      <FaEdit />
-                    </Button>
-                    <Button
-                      variant="outline-danger"
+                    <Button 
+                      variant="outline-danger" 
                       size="sm"
                       onClick={() => handleDeleteClick(image.id)}
                       disabled={loading}
@@ -278,30 +244,21 @@ const AdminImages = () => {
                   </td>
                 </tr>
               ))}
+              {images.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No images found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </Table>
-
-          <Pagination
+          
+          <Pagination 
             currentPage={pagination.page}
             totalPages={pagination.pages}
             onPageChange={handlePageChange}
           />
-
-          {/* Edit Image Modal */}
-          <Modal show={showEditModal} onHide={handleCloseModal} size="lg" centered>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit Image</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {selectedImage && (
-                <EditImage
-                  image={selectedImage}
-                  onClose={handleCloseModal}
-                  onEditSuccess={handleAfterEdit}
-                />
-              )}
-            </Modal.Body>
-          </Modal>
         </>
       )}
     </div>
