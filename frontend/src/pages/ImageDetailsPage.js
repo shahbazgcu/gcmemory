@@ -7,8 +7,20 @@ import AuthContext from '../context/AuthContext';
 import RelatedImages from '../components/RelatedImages';
 import ImageLightbox from '../components/ImageLightbox';
 import './ImageDetailsPage.css';
+import { Toast, ToastContainer } from 'react-bootstrap';
+
 
 const ImageDetailsPage = () => {
+
+const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
+const showToast = (message, variant = 'success') => {
+  setToast({ show: true, message, variant });
+  setTimeout(() => {
+    setToast({ show: false, message: '', variant });
+  }, 3000); // 3 sec auto hide
+};
+
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useContext(AuthContext);
@@ -52,16 +64,34 @@ const ImageDetailsPage = () => {
   }, [id]);
 
   // Handle image download
-const handleDownload = () => {
+// Handle image download
+const handleDownload = async () => {
   if (!image) return;
 
-  const link = document.createElement('a');
-  link.href = process.env.REACT_APP_API_URL + image.image_path;
-  link.download = `gcu-memory-${image.id}-${image.title.replace(/\s+/g, '-')}.jpg`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  try {
+    const response = await fetch(process.env.REACT_APP_API_URL + image.image_path, {
+      method: "GET",
+    });
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `gcu-memory-${image.id}-${image.title.replace(/\s+/g, '-')}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // memory release
+    window.URL.revokeObjectURL(url);
+ showToast('Image downloaded successfully ✅', 'success');
+  } catch (err) {
+    console.error("Download failed:", err);
+    showToast('Failed to download image ❌', 'danger');
+  }
 };
+
 
 
   // Handle image deletion
@@ -74,10 +104,12 @@ const handleDownload = () => {
     
     try {
       await api.delete(`/api/images/${id}`);
+       showToast('Image deleted successfully ✅', 'success');
       navigate('/gallery', { state: { message: 'Image deleted successfully.' } });
     } catch (err) {
       console.error('Error deleting image:', err);
       alert('Failed to delete image. Please try again.');
+      showToast('Failed to delete image ❌', 'danger');
       setDeleteLoading(false);
     }
   };
@@ -115,6 +147,18 @@ const handleDownload = () => {
 
   return (
     <div className="image-details-page">
+      <ToastContainer position="top-end" className="p-3">
+  <Toast 
+    bg={toast.variant} 
+    show={toast.show} 
+    onClose={() => setToast({ ...toast, show: false })}
+    delay={3000} 
+    autohide
+  >
+    <Toast.Body className="text-white">{toast.message}</Toast.Body>
+  </Toast>
+</ToastContainer>
+
       <Container>
         <div className="image-details-container">
           <Row>
@@ -138,6 +182,12 @@ const handleDownload = () => {
                     e.target.src = '/images/photo1754121287.jpg';
                   }}
                 />
+
+                  {image.description && (
+      <div className="image-description mt-3 p-3 bg-light rounded">
+        <p className="mb-0">{image.description}</p>
+      </div>
+    )}
               </div>
             </Col>
             
@@ -152,11 +202,11 @@ const handleDownload = () => {
                     </Badge>
                   )}
                   
-                  {image.description && (
+                  {/* {image.description && (
                     <div className="image-description mt-3">
                       <p>{image.description}</p>
                     </div>
-                  )}
+                  )} */}
                   
                   <hr />
                   

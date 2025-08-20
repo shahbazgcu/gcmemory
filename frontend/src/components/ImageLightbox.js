@@ -51,7 +51,7 @@ const ImageLightbox = ({ show, onHide, image, relatedImages = [] }) => {
       dialogClassName="lightbox-modal"
     >
       <Modal.Header closeButton className="border-0 bg-dark text-white">
-        <Modal.Title>{currentImage?.title}</Modal.Title>
+        {/* <Modal.Title>{currentImage?.title}</Modal.Title> */}
       </Modal.Header>
       
       <Modal.Body className="p-0 bg-dark text-white">
@@ -85,54 +85,54 @@ const ImageLightbox = ({ show, onHide, image, relatedImages = [] }) => {
       
       <Modal.Footer className="border-0 bg-dark text-white">
         <div className="lightbox-info">
-          <h5>{currentImage?.title}</h5>
+          {/* <h5>{currentImage?.title}</h5> */}
           
-          {currentImage?.description && (
+          {/* {currentImage?.description && (
             <p className="mb-2">{currentImage.description}</p>
-          )}
+          )} */}
           
           <Row className="metadata-row">
-            {currentImage?.category_name && (
+            {/* {currentImage?.category_name && (
               <Col xs={6} md={4} className="metadata-item">
                 <strong>Category:</strong> {currentImage.category_name}
               </Col>
-            )}
+            )} */}
             
-            {currentImage?.year && (
+            {/* {currentImage?.year && (
               <Col xs={6} md={4} className="metadata-item">
                 <strong>Year:</strong> {currentImage.year}
               </Col>
-            )}
+            )} */}
             
-            {currentImage?.location && (
+            {/* {currentImage?.location && (
               <Col xs={6} md={4} className="metadata-item">
                 <strong>Location:</strong> {currentImage.location}
               </Col>
-            )}
+            )} */}
             
-            {currentImage?.department && (
+            {/* {currentImage?.department && (
               <Col xs={6} md={4} className="metadata-item">
                 <strong>Department:</strong> {currentImage.department}
               </Col>
-            )}
+            )} */}
           </Row>
         </div>
         
-        <Button 
+        {/* <Button 
           variant="primary" 
           onClick={handleDownload}
           className="download-btn"
         >
           <FaDownload /> Download
-        </Button>
+        </Button> */}
         
-        <Button 
+        {/* <Button 
           variant="outline-light" 
           onClick={onHide}
           className="close-btn"
         >
           <FaTimesCircle /> Close
-        </Button>
+        </Button> */}
       </Modal.Footer>
     </Modal>
   );

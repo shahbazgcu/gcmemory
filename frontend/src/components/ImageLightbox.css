@@ -48,6 +48,19 @@
   overflow: hidden;
 }
 
+/* Close button icon ko white karna */
+.lightbox-modal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 1 !important;
+  /* taake light mode me fade na lage */
+}
+
+/* Carousel arrows ko white karna */
+.lightbox-carousel .carousel-control-prev-icon,
+.lightbox-carousel .carousel-control-next-icon {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 .lightbox-img {
   max-height: 100%;
   max-width: 100%;
@@ -63,6 +76,13 @@
   color: var(--color-primary);
   cursor: pointer;
   transition: background 0.3s ease;
+}
+
+.carousel-arrow {
+  color: white !important;
+  font-size: 2rem;
+  background-color: #922121;
+  /* thoda bada bhi karna ho to */
 }
 
 .carousel-arrow:hover {
@@ -137,4 +157,6 @@
   .close-btn {
     width: 100%;
   }
+
+
 }

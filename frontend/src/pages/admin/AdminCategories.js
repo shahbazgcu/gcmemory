@@ -2,8 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal, Spinner, Alert } from 'react-bootstrap';
 import { FaEdit, FaTrashAlt, FaPlus } from 'react-icons/fa';
 import api from '../../utils/api';
+import { Toast, ToastContainer } from 'react-bootstrap';
+
 
 const AdminCategories = () => {
+
+  const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
+const showToast = (message, variant = 'success') => {
+  setToast({ show: true, message, variant });
+  setTimeout(() => {
+    setToast({ show: false, message: '', variant });
+  }, 3000); // 3 sec auto hide
+};
+
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -77,9 +88,14 @@ const AdminCategories = () => {
       if (modalMode === 'add') {
         // Create new category
         await api.post('/api/categories', currentCategory);
+        showToast('Category saved successfully ✅', 'success');
+
+
       } else {
         // Update existing category
         await api.put(`/api/categories/${currentCategory.id}`, currentCategory);
+        showToast('Category update successfully ✅', 'success');
+
       }
       
       // Refresh categories list
@@ -110,8 +126,11 @@ const AdminCategories = () => {
       await api.delete(`/api/categories/${categoryId}`);
       await fetchCategories();
       setError(null);
+      showToast('Category deleted successfully ✅', 'success');
+
     } catch (err) {
       console.error('Error deleting category:', err);
+      showToast('Some Error Occur', 'danger');
       setError(
         err.response?.data?.message || 
         'Failed to delete category. Please try again.'
@@ -133,6 +152,18 @@ const AdminCategories = () => {
 
   return (
     <div className="admin-categories">
+          <ToastContainer position="top-end" className="p-3">
+        <Toast 
+          bg={toast.variant} 
+          show={toast.show} 
+          onClose={() => setToast({ ...toast, show: false })}
+          delay={3000} 
+          autohide
+        >
+          <Toast.Body className="text-white">{toast.message}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Manage Categories</h2>
         <Button 
