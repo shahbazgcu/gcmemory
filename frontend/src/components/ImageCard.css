@@ -11,7 +11,6 @@
   --color-secondary-bg: var(--color-red);
   --color-secondary-text: #fff;
 }
-
 .image-card {
   height: 100%;
   transition: all 0.3s ease;
@@ -35,11 +34,59 @@
 }
 
 .image-card-img-container {
+  position: relative;
   height: 200px;
   overflow: hidden;
   border-radius: 8px 8px 0 0;
 }
 
+/* Share icons container */
+.image-card-share {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 0.1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+/* Show share icons on hover */
+.image-card:hover .image-card-share {
+  opacity: 1;
+}
+
+/* Share icon buttons */
+.share-icon {
+  /* background-color: rgba(255, 255, 255, 0.95); */
+  color: var(--color-navy);
+  padding: 2px;
+  border-radius: 50%;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+}
+
+.share-icon:hover {
+  background-color: #fff;
+  color: var(--color-navy);
+  font-weight: bold;
+}
+
+.share-copy {
+  outline: none;
+  background: none;
+}
+
+/* Image styles */
 .image-card-img {
   width: 100%;
   height: 100%;
@@ -109,4 +156,59 @@
   font-size: 0.8rem;
   color: var(--color-navy);
   font-weight: 500;
+}
+
+/* Overlay container at bottom of image */
+.image-card-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5); /* dim black background */
+  color: white;
+  padding: 0.2rem;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* Title style inside overlay */
+.image-card-overlay-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #fff;
+  margin: 0;
+  transition: font-size 0.3s ease, color 0.3s ease;
+}
+
+.image-card:hover .image-card-overlay-title {
+  font-size: 1rem; /* Slightly larger on hover, optional */
+}
+
+/* Meta (year/category) - hidden by default */
+.image-card-overlay-meta {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Reveal meta on hover */
+.image-card:hover .image-card-overlay-meta {
+  opacity: 1;
+  max-height: 100px; /* Adjust based on expected content */
+}
+
+
+/* Optional: style year and category badges to look the same in overlay */
+.image-card-overlay-meta .image-card-year,
+.image-card-overlay-meta .image-card-category {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
 }

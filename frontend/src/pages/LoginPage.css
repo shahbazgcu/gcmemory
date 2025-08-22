@@ -79,3 +79,7 @@
   color: var(--color-red);
   text-decoration: underline;
 }
+
+input:valid {
+  background-image: none !important;
+}

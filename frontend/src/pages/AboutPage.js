@@ -11,19 +11,24 @@ const AboutPage = () => {
         {/* First Row */}
         <Row className="align-items-center mb-5">
           <Col md={7}>
+          <div className="me-5">
             <h2>About Government College University (GCU)</h2>
-            <p>
+            <p  style={{ textAlign: 'justify' }}>
               Established in 1864, Government College University (GCU) Lahore is
               one of the oldest and most prestigious institutions of higher
               learning in Pakistan. Known for its academic excellence,
               distinguished alumni, and rich cultural traditions, GCU has been a
               beacon of knowledge and progress for generations.
             </p>
-            <p>
+            <p  style={{ textAlign: 'justify' }}>
               Over the years, GCU has nurtured poets, scientists, thinkers, and
               leaders who have contributed to the academic, political, and
               cultural fabric of the nation.
             </p>
+             <Link to="https://gcu.edu.pk/" target="_blank">
+              <Button variant="primary">GCU Website</Button>
+            </Link>
+            </div>
           </Col>
           <Col md={5}>
             <img
@@ -37,14 +42,15 @@ const AboutPage = () => {
         {/* Second Row */}
         <Row className="align-items-center">
           <Col md={7} className="order-md-2 mb-4 mb-md-0">
+          <div className="ms-5">
             <h2>About the GCU Memories Archive Portal</h2>
-            <p>
+            <p  style={{ textAlign: 'justify' }}>
               The GCU Memories Archive Portal is dedicated to collecting,
               preserving, and sharing the historical treasures of GCU. From rare
               photographs and archival documents to videos and oral histories,
               the portal serves as a digital time capsule of GCU’s vibrant past.
             </p>
-            <p>
+            <p  style={{ textAlign: 'justify' }}>
               It invites students, alumni, faculty, and the public to explore
                to the university’s legacy. Whether it’s a
               black-and-white snapshot from the 1950s or a student event from
@@ -53,6 +59,7 @@ const AboutPage = () => {
             <Link to="/gallery">
               <Button variant="primary">Explore the Archive</Button>
             </Link>
+            </div>
           </Col>
           <Col md={5} className="order-md-1">
             <img

@@ -57,8 +57,8 @@ const AdminImageView = () => {
       </div>
 
       <dl className="image-details">
-        <dt>Title</dt>
-        <dd>{image.title}</dd>
+        {/* <dt>Title</dt>
+        <dd>{image.title}</dd> */}
 
         <dt>Category</dt>
         <dd>{image.category_name || '-'}</dd>

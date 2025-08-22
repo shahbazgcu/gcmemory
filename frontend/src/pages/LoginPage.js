@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaSignInAlt } from 'react-icons/fa';
 import AuthContext from '../context/AuthContext';
 import './LoginPage.css';
@@ -142,14 +142,14 @@ const LoginPage = () => {
                   </div>
                 </Form>
                 
-                <div className="text-center mt-4">
+                {/* <div className="text-center mt-4">
                   <p className="mb-0">
                     Don't have an account?{' '}
                     <Link to="/register" className="text-decoration-underline">
                       Register here
                     </Link>
                   </p>
-                </div>
+                </div> */}
               </Card.Body>
             </Card>
           </Col>
