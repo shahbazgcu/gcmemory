@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal, Spinner, Alert, Badge } from 'react-bootstrap';
 import { FaEdit, FaUsersCog } from 'react-icons/fa';
 import api from '../../utils/api';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// npm install react-toastify
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -67,12 +71,16 @@ const AdminUsers = () => {
       
       // Refresh users list
       await fetchUsers();
+      toast.success("User role updated successfully!");
+
       
       // Close modal
       setShowModal(false);
       setError(null);
     } catch (err) {
       console.error('Error updating user role:', err);
+      toast.error("Failed to update user role. Please try again.");
+
       setFormError(
         err.response?.data?.message || 
         'Failed to update user role. Please try again.'
@@ -111,6 +119,7 @@ const AdminUsers = () => {
   }
 
   return (
+    <>
     <div className="admin-users">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Manage Users</h2>
@@ -229,6 +238,9 @@ const AdminUsers = () => {
         </Modal.Footer>
       </Modal>
     </div>
+
+       <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 };
 

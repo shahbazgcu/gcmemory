@@ -62,3 +62,43 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-red);
 }
+
+/* Sexy gradient background for different types */
+.custom-toast.bg-success {
+  background: linear-gradient(135deg, #00c853, #64dd17);
+  color: #fff !important;
+}
+
+.custom-toast.bg-danger {
+  background: linear-gradient(135deg, #ff1744, #d50000);
+  color: #fff !important;
+}
+
+.custom-toast.bg-warning {
+  background: linear-gradient(135deg, #ff9100, #ff6d00);
+  color: #fff !important;
+}
+
+.custom-toast.bg-info {
+  background: linear-gradient(135deg, #00b0ff, #2962ff);
+  color: #fff !important;
+}
+
+/* Add animation for entry */
+.custom-toast {
+  animation: slideDown 0.6s ease forwards;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  padding: 0.75rem 1rem;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

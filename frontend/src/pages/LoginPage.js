@@ -1,67 +1,84 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { FaSignInAlt } from 'react-icons/fa';
-import AuthContext from '../context/AuthContext';
-import './LoginPage.css';
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Card,
+  Spinner,
+} from "react-bootstrap";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaSignInAlt } from "react-icons/fa";
+import AuthContext from "../context/AuthContext";
+import "./LoginPage.css";
 
-const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+const LoginPage = ({ showToast }) => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [validated, setValidated] = useState(false);
-  const [localError, setLocalError] = useState('');
-  
-  const { login, loading, error, clearError, isAuthenticated, user } = useContext(AuthContext);
+  const [localError, setLocalError] = useState("");
+
+  const { login, loading, error, clearError, isAuthenticated, user } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated) {
-      if (user && user.role === 'admin') {
-        navigate('/admin/');
+      if (user && user.role === "admin") {
+        navigate("/admin/");
       } else {
-        const redirectPath = location.state?.from || '/';
+        const redirectPath = location.state?.from || "/";
         navigate(redirectPath);
       }
     }
   }, [isAuthenticated, navigate, location.state, user]);
-  
-  // Clear any auth context errors when component mounts or unmounts
+
+  // Show toast when error occurs
+  useEffect(() => {
+    if (error) {
+      showToast(error, "danger" );
+    }
+  }, [error, showToast]);
+
+  // Clear errors on mount/unmount
   useEffect(() => {
     clearError();
     return () => clearError();
   }, [clearError]);
-  
+
   const { email, password } = formData;
-  
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setLocalError('');
+    setLocalError("");
     clearError();
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-    
+
     if (form.checkValidity() === false) {
       e.stopPropagation();
       setValidated(true);
+      showToast("Please fill in all required fields.", "warning" );
       return;
     }
-    
+
     setValidated(true);
-    
+
     const result = await login({ email, password });
-    
+
     if (result.success) {
-      // Redirect will happen automatically via the useEffect
+      showToast("Login successful", "success" );
+      // Redirect handled by useEffect
+    } else {
+      showToast("Invalid credentials", "danger" );
     }
   };
-  
+
   return (
     <div className="login-page">
       <Container>
@@ -73,17 +90,9 @@ const LoginPage = () => {
                   <h2 className="login-title">
                     <FaSignInAlt className="me-2" /> Login
                   </h2>
-                  <p className="text-muted">
-                    Access your GCU Memories account
-                  </p>
+                  <p className="text-muted">Access your GCU Memories account</p>
                 </div>
-                
-                {(error || localError) && (
-                  <Alert variant="danger" className="mb-4">
-                    {error || localError}
-                  </Alert>
-                )}
-                
+
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                   <Form.Group className="mb-3" controlId="email">
                     <Form.Label>Email address</Form.Label>
@@ -99,7 +108,7 @@ const LoginPage = () => {
                       Please enter a valid email address.
                     </Form.Control.Feedback>
                   </Form.Group>
-                  
+
                   <Form.Group className="mb-4" controlId="password">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
@@ -115,41 +124,32 @@ const LoginPage = () => {
                       Password must be at least 6 characters long.
                     </Form.Control.Feedback>
                   </Form.Group>
-                  
+
                   <div className="d-grid">
-                    <Button 
-                      variant="primary" 
-                      type="submit" 
-                      size="lg" 
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      size="lg"
                       disabled={loading}
                     >
                       {loading ? (
                         <>
-                          <Spinner 
-                            as="span" 
-                            animation="border" 
-                            size="sm" 
-                            role="status" 
-                            aria-hidden="true" 
-                            className="me-2" 
+                          <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                            className="me-2"
                           />
                           Logging in...
                         </>
                       ) : (
-                        'Login'
+                        "Login"
                       )}
                     </Button>
                   </div>
                 </Form>
-                
-                {/* <div className="text-center mt-4">
-                  <p className="mb-0">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="text-decoration-underline">
-                      Register here
-                    </Link>
-                  </p>
-                </div> */}
               </Card.Body>
             </Card>
           </Col>

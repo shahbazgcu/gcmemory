@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Container, Toast, ToastContainer } from 'react-bootstrap';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -16,21 +16,26 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import NotFound from './pages/NotFound';
 import EditImage from './pages/admin/EditImage';
-import AuthContext from './context/AuthContext'; // 👈 import AuthContext
+import AuthContext from './context/AuthContext';
 import './App.css';
 
-function App() {
+function App({ showToast }) {
   const { user, isAuthenticated, loading } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const location = useLocation();
-  
-    // 👇 Redirect to admin dashboard if authenticated admin opens the app
-    useEffect(() => {
-      if (!loading && isAuthenticated && user?.role === 'admin' && location.pathname === '/') {
-        navigate('/admin');
-      }
-    }, [loading, isAuthenticated, user, navigate, location]);
-  
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // 👇 Redirect to admin dashboard if authenticated admin opens the app
+  useEffect(() => {
+    if (
+      !loading &&
+      isAuthenticated &&
+      user?.role === 'admin' &&
+      location.pathname === '/'
+    ) {
+      navigate('/admin');
+    }
+  }, [loading, isAuthenticated, user, navigate, location]);
+
   return (
     <div className="app-wrapper">
       <Header />
@@ -42,28 +47,37 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/images/:id" element={<ImageDetailsPage />} />
             <Route path="/admin/images/edit/:id" element={<EditImage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage showToast={showToast} />} />
             <Route path="/register" element={<RegisterPage />} />
-            
-            {/* Protected routes (requires login) */}
-            <Route path="/upload" element={
-              <ProtectedRoute>
-                <UploadPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            } />
-            
+
+            {/* Protected routes */}
+            <Route
+              path="/upload"
+              element={
+                <ProtectedRoute>
+                  <UploadPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Admin routes */}
-            <Route path="/admin/*" element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            } />
-            
+            <Route
+              path="/admin/*"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+
             {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />
           </Routes>
