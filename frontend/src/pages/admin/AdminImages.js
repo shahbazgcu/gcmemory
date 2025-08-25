@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import Pagination from '../../components/Pagination';
 import EditImage from './EditImage'; 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminImages = () => {
   const [images, setImages] = useState([]);
@@ -41,6 +43,7 @@ const AdminImages = () => {
       setCategories(res.data.categories);
     } catch (err) {
       console.error('Error fetching categories:', err);
+      toast.error("Failed to load categories");
     }
   };
 
@@ -66,6 +69,7 @@ const AdminImages = () => {
     } catch (err) {
       console.error('Error fetching images:', err);
       setError('Failed to load images. Please try again.');
+      toast.error("Failed to load images");
     } finally {
       setLoading(false);
     }
@@ -90,6 +94,7 @@ const AdminImages = () => {
   const handleFilterSubmit = (e) => {
     e.preventDefault();
     fetchImages(1); // reset to first page
+    toast.info("Filters applied");
   };
 
   // Pagination change handler
@@ -108,12 +113,14 @@ const AdminImages = () => {
       await api.delete(`/api/images/${imageId}`);
       await fetchImages(pagination.page);
       setError(null);
+      toast.success("Image deleted successfully");
     } catch (err) {
       console.error('Error deleting image:', err);
       setError(
         err.response?.data?.message ||
         'Failed to delete image. Please try again.'
       );
+      toast.error("Failed to delete image");
     } finally {
       setLoading(false);
     }
@@ -135,6 +142,7 @@ const AdminImages = () => {
   const handleAfterEdit = () => {
     fetchImages(pagination.page);
     handleCloseModal();
+    toast.success("Image updated successfully");
   };
 
   return (
@@ -221,8 +229,6 @@ const AdminImages = () => {
                 <th>Image</th>
                 <th>Title</th>
                 <th>Category</th>
-                {/* <th>Uploader</th>
-                <th>Date</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -250,8 +256,6 @@ const AdminImages = () => {
                   </td>
                   <td>{image.title}</td>
                   <td>{image.category_name || '-'}</td>
-                  {/* <td>{image.uploader_name || 'Anonymous'}</td> */}
-                  {/* <td>{formatDate(image.created_at)}</td> */}
                   <td>
                     <Link
                       to={`/admin/images/${image.id}`}
@@ -304,6 +308,9 @@ const AdminImages = () => {
           </Modal>
         </>
       )}
+
+      {/* Toast Notifications */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

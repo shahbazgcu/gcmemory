@@ -1,9 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Row, Col, Form, Button, Card, Alert, Spinner, ProgressBar } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Card,
+  Alert,
+  Spinner,
+  ProgressBar,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaUpload, FaImage } from "react-icons/fa";
 import api from "../utils/api";
 import AuthContext from "../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./UploadPage.css";
 
 const UploadPage = () => {
@@ -31,15 +43,13 @@ const UploadPage = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [yearOptions, setYearOptions] = useState([]);
 
-  // Generate year options (current year down to 1900)
+  // Generate year options
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const years = [];
-
     for (let year = currentYear; year >= 1864; year--) {
       years.push(year);
     }
-
     setYearOptions(years);
   }, []);
 
@@ -51,14 +61,13 @@ const UploadPage = () => {
         setCategories(res.data.categories);
       } catch (err) {
         console.error("Error fetching categories:", err);
-        setError("Failed to load categories. Please refresh the page.");
+        toast.error("Failed to load categories. Please refresh the page.");
       }
     };
-
     fetchCategories();
   }, []);
 
-  // Handle form input changes
+  // Handle input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -66,20 +75,20 @@ const UploadPage = () => {
     });
   };
 
-  // Handle image file selection
+  // Handle file change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
-      // Check file type
       if (!file.type.match("image.*")) {
         setError("Please select an image file (JPEG, PNG, etc.)");
+        toast.error("Invalid file type. Please select an image.");
         return;
       }
 
-      // Check file size (max 3MB)
       if (file.size > 3 * 1024 * 1024) {
         setError("Image size should not exceed 3MB");
+        toast.error("Image size should not exceed 3MB.");
         return;
       }
 
@@ -89,7 +98,7 @@ const UploadPage = () => {
     }
   };
 
-  // Handle form submission
+  // Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -102,6 +111,7 @@ const UploadPage = () => {
 
     if (!imageFile) {
       setError("Please select an image file to upload");
+      toast.error("Please select an image file to upload.");
       return;
     }
 
@@ -110,53 +120,58 @@ const UploadPage = () => {
     setUploadProgress(0);
 
     try {
-      // Create form data for file upload
       const uploadData = new FormData();
       uploadData.append("image", imageFile);
       uploadData.append("title", formData.title);
 
-      if (formData.description)
-        uploadData.append("description", formData.description);
-      if (formData.category_id)
-        uploadData.append("category_id", formData.category_id);
+      if (formData.description) uploadData.append("description", formData.description);
+      if (formData.category_id) uploadData.append("category_id", formData.category_id);
       if (formData.year) uploadData.append("year", formData.year);
       if (formData.location) uploadData.append("location", formData.location);
-      if (formData.department)
-        uploadData.append("department", formData.department);
+      if (formData.department) uploadData.append("department", formData.department);
       if (formData.source) uploadData.append("source", formData.source);
       if (formData.keywords) uploadData.append("keywords", formData.keywords);
 
-      // Upload with progress tracking
       const res = await api.post("/api/images", uploadData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
-          const progress = Math.round(
-            (progressEvent.loaded / progressEvent.total) * 100
-          );
+          const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
           setUploadProgress(progress);
         },
       });
 
-      // Navigate to the newly uploaded image
-      navigate(`/images/${res.data.imageId}`, {
-        state: { message: "Image uploaded successfully." },
-      });
+      toast.success("Image uploaded successfully ✅");
+      // navigate(`/images/${res.data.imageId}`, {
+      //   state: { message: "Image uploaded successfully." },
+      // });
+      setFormData({
+  title: "",
+  description: "",
+  category_id: "",
+  year: "",
+  location: "",
+  department: "",
+  source: "",
+  keywords: "",
+});
+setImageFile(null);
+setPreviewUrl("");
+setValidated(false);
+setUploadProgress(0);
+setLoading(false);
     } catch (err) {
       console.error("Error uploading image:", err);
-
-      setError(
-        err.response?.data?.message ||
-          "Failed to upload image. Please try again."
+      toast.error(
+        err.response?.data?.message || "Failed to upload image. Please try again."
       );
-
+      setError(
+        err.response?.data?.message || "Failed to upload image. Please try again."
+      );
       setLoading(false);
     }
   };
 
   return (
-    
     <div className="admin-upload">
       <Container>
         <Row className="justify-content-center">
@@ -181,6 +196,7 @@ const UploadPage = () => {
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                   <Row>
                     <Col md={7}>
+                      {/* Title */}
                       <Form.Group className="mb-3" controlId="title">
                         <Form.Label>Title*</Form.Label>
                         <Form.Control
@@ -196,6 +212,7 @@ const UploadPage = () => {
                         </Form.Control.Feedback>
                       </Form.Group>
 
+                      {/* Description */}
                       <Form.Group className="mb-3" controlId="description">
                         <Form.Label>Description</Form.Label>
                         <Form.Control
@@ -208,6 +225,7 @@ const UploadPage = () => {
                         />
                       </Form.Group>
 
+                      {/* Category & Year */}
                       <Row>
                         <Col md={6}>
                           <Form.Group className="mb-3" controlId="category">
@@ -254,6 +272,7 @@ const UploadPage = () => {
                         </Col>
                       </Row>
 
+                      {/* Location & Department */}
                       <Row>
                         <Col md={6}>
                           <Form.Group className="mb-3" controlId="location">
@@ -282,6 +301,7 @@ const UploadPage = () => {
                         </Col>
                       </Row>
 
+                      {/* Source */}
                       <Form.Group className="mb-3" controlId="source">
                         <Form.Label>Source</Form.Label>
                         <Form.Control
@@ -293,6 +313,7 @@ const UploadPage = () => {
                         />
                       </Form.Group>
 
+                      {/* Keywords */}
                       <Form.Group className="mb-4" controlId="keywords">
                         <Form.Label>Keywords *</Form.Label>
                         <Form.Control
@@ -309,6 +330,7 @@ const UploadPage = () => {
                       </Form.Group>
                     </Col>
 
+                    {/* Image upload + preview */}
                     <Col md={5}>
                       <div className="upload-preview-container mb-3">
                         {previewUrl ? (
@@ -334,8 +356,7 @@ const UploadPage = () => {
                           required
                         />
                         <Form.Text className="text-muted">
-                          Maximum file size: 3MB. Supported formats: JPEG, PNG,
-                          GIF
+                          Maximum file size: 3MB. Supported formats: JPEG, PNG, GIF
                         </Form.Text>
                       </Form.Group>
 
@@ -384,6 +405,9 @@ const UploadPage = () => {
           </Col>
         </Row>
       </Container>
+
+      {/* Toast notifications */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

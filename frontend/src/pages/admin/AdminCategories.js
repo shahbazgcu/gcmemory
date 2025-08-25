@@ -2,19 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal, Spinner, Alert } from 'react-bootstrap';
 import { FaEdit, FaTrashAlt, FaPlus } from 'react-icons/fa';
 import api from '../../utils/api';
-import { Toast, ToastContainer } from 'react-bootstrap';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminCategories = () => {
-
-  const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
-const showToast = (message, variant = 'success') => {
-  setToast({ show: true, message, variant });
-  setTimeout(() => {
-    setToast({ show: false, message: '', variant });
-  }, 3000); // 3 sec auto hide
-};
-
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,9 +30,16 @@ const showToast = (message, variant = 'success') => {
       const res = await api.get('/api/categories');
       setCategories(res.data.categories);
       setError(null);
+
+      if (res.data.categories.length > 0) {
+        toast.success("Categories loaded successfully!");
+      } else {
+        toast.warning("No categories found!");
+      }
     } catch (err) {
       console.error('Error fetching categories:', err);
       setError('Failed to load categories. Please try again.');
+      toast.error("Failed to fetch categories!");
     } finally {
       setLoading(false);
     }
@@ -62,6 +60,8 @@ const showToast = (message, variant = 'success') => {
     setModalMode('add');
     setFormError('');
     setShowModal(true);
+
+    toast.info("Adding a new category");
   };
 
   // Open modal in edit mode
@@ -70,15 +70,17 @@ const showToast = (message, variant = 'success') => {
     setModalMode('edit');
     setFormError('');
     setShowModal(true);
+
+    toast.info(`Editing category: ${category.name}`);
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate form
     if (!currentCategory.name.trim()) {
       setFormError('Category name is required');
+      toast.warning("Category name is required!");
       return;
     }
     
@@ -86,26 +88,19 @@ const showToast = (message, variant = 'success') => {
       setLoading(true);
       
       if (modalMode === 'add') {
-        // Create new category
         await api.post('/api/categories', currentCategory);
-        showToast('Category saved successfully ✅', 'success');
-
-
+        toast.success('Category added successfully ✅');
       } else {
-        // Update existing category
         await api.put(`/api/categories/${currentCategory.id}`, currentCategory);
-        showToast('Category update successfully ✅', 'success');
-
+        toast.success('Category updated successfully ✅');
       }
       
-      // Refresh categories list
       await fetchCategories();
-      
-      // Close modal
       setShowModal(false);
       setError(null);
     } catch (err) {
       console.error('Error saving category:', err);
+      toast.error("Failed to save category!");
       setFormError(
         err.response?.data?.message || 
         'Failed to save category. Please try again.'
@@ -125,12 +120,11 @@ const showToast = (message, variant = 'success') => {
       setLoading(true);
       await api.delete(`/api/categories/${categoryId}`);
       await fetchCategories();
+      toast.success('Category deleted successfully ✅');
       setError(null);
-      showToast('Category deleted successfully ✅', 'success');
-
     } catch (err) {
       console.error('Error deleting category:', err);
-      showToast('Some Error Occur', 'danger');
+      toast.error("Failed to delete category!");
       setError(
         err.response?.data?.message || 
         'Failed to delete category. Please try again.'
@@ -151,145 +145,138 @@ const showToast = (message, variant = 'success') => {
   }
 
   return (
-    <div className="admin-categories">
-          <ToastContainer position="top-end" className="p-3">
-        <Toast 
-          bg={toast.variant} 
-          show={toast.show} 
-          onClose={() => setToast({ ...toast, show: false })}
-          delay={3000} 
-          autohide
-        >
-          <Toast.Body className="text-white">{toast.message}</Toast.Body>
-        </Toast>
-      </ToastContainer>
-
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Manage Categories</h2>
-        <Button 
-          variant="primary" 
-          onClick={handleAddClick}
-          disabled={loading}
-        >
-          <FaPlus className="me-1" /> Add Category
-        </Button>
-      </div>
-      
-      {error && (
-        <Alert variant="danger" className="mb-4">
-          {error}
-        </Alert>
-      )}
-      
-      <Table responsive hover className="admin-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category, index) => (
-            <tr key={category.id}>
-              <td>{index + 1}</td>
-              <td>{category.name}</td>
-              <td>{category.description}</td>
-              <td>
-                <Button 
-                  variant="outline-secondary" 
-                  size="sm" 
-                  className="me-2"
-                  onClick={() => handleEditClick(category)}
-                >
-                  <FaEdit />
-                </Button>
-                <Button 
-                  variant="outline-danger" 
-                  size="sm"
-                  onClick={() => handleDeleteClick(category.id)}
-                  disabled={loading}
-                >
-                  <FaTrashAlt />
-                </Button>
-              </td>
-            </tr>
-          ))}
-          {categories.length === 0 && (
-            <tr>
-              <td colSpan="4" className="text-center">
-                No categories found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
-      
-      {/* Add/Edit Category Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {modalMode === 'add' ? 'Add New Category' : 'Edit Category'}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {formError && (
-            <Alert variant="danger">{formError}</Alert>
-          )}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="categoryName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={currentCategory.name}
-                onChange={handleInputChange}
-                placeholder="Enter category name"
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="categoryDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="description"
-                value={currentCategory.description || ''}
-                onChange={handleInputChange}
-                placeholder="Enter category description (optional)"
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancel
-          </Button>
+    <>
+      <div className="admin-categories">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>Manage Categories</h2>
           <Button 
             variant="primary" 
-            onClick={handleSubmit}
+            onClick={handleAddClick}
             disabled={loading}
           >
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                  className="me-1"
-                />
-                Saving...
-              </>
-            ) : (
-              'Save'
-            )}
+            <FaPlus className="me-1" /> Add Category
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        </div>
+        
+        {error && (
+          <Alert variant="danger" className="mb-4">
+            {error}
+          </Alert>
+        )}
+        
+        <Table responsive hover className="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category, index) => (
+              <tr key={category.id}>
+                <td>{index + 1}</td>
+                <td>{category.name}</td>
+                <td>{category.description}</td>
+                <td>
+                  <Button 
+                    variant="outline-secondary" 
+                    size="sm" 
+                    className="me-2"
+                    onClick={() => handleEditClick(category)}
+                  >
+                    <FaEdit />
+                  </Button>
+                  <Button 
+                    variant="outline-danger" 
+                    size="sm"
+                    onClick={() => handleDeleteClick(category.id)}
+                    disabled={loading}
+                  >
+                    <FaTrashAlt />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+            {categories.length === 0 && (
+              <tr>
+                <td colSpan="4" className="text-center">
+                  No categories found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+        
+        {/* Add/Edit Category Modal */}
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {modalMode === 'add' ? 'Add New Category' : 'Edit Category'}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {formError && (
+              <Alert variant="danger">{formError}</Alert>
+            )}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="categoryName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={currentCategory.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter category name"
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="categoryDescription">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  value={currentCategory.description || ''}
+                  onChange={handleInputChange}
+                  placeholder="Enter category description (optional)"
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="primary" 
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="me-1"
+                  />
+                  Saving...
+                </>
+              ) : (
+                'Save'
+              )}
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+
+      {/* Toasts */}
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 };
 

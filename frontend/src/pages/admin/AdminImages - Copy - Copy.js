@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Row, Col, Spinner, Alert, Image } from 'react-bootstrap';
 import { FaEye, FaTrashAlt, FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from '../../utils/api';
 import Pagination from '../../components/Pagination';
 
@@ -36,6 +38,7 @@ const AdminImages = () => {
       setCategories(res.data.categories);
     } catch (err) {
       console.error('Error fetching categories:', err);
+      toast.error("Failed to load categories.");
     }
   };
   
@@ -58,9 +61,16 @@ const AdminImages = () => {
       setImages(res.data.images);
       setPagination(res.data.pagination);
       setError(null);
+
+      if (res.data.images.length === 0) {
+        toast.warning("No images found with current filters.");
+      } else {
+        toast.success("Images loaded successfully!");
+      }
     } catch (err) {
       console.error('Error fetching images:', err);
       setError('Failed to load images. Please try again.');
+      toast.error("Failed to fetch images!");
     } finally {
       setLoading(false);
     }
@@ -78,6 +88,7 @@ const AdminImages = () => {
   // Handle filter form submission
   const handleFilterSubmit = (e) => {
     e.preventDefault();
+    toast.info("Applying filters...");
     fetchImages(1); // Reset to first page when filters change
   };
   
@@ -99,12 +110,14 @@ const AdminImages = () => {
       // Refresh images list
       await fetchImages(pagination.page);
       setError(null);
+      toast.success("Image deleted successfully!");
     } catch (err) {
       console.error('Error deleting image:', err);
       setError(
         err.response?.data?.message || 
         'Failed to delete image. Please try again.'
       );
+      toast.error("Failed to delete image!");
     } finally {
       setLoading(false);
     }
@@ -261,6 +274,8 @@ const AdminImages = () => {
           />
         </>
       )}
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
