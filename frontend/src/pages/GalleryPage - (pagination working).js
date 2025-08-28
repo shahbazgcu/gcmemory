@@ -161,42 +161,34 @@ const GalleryPage = () => {
       setError(null);
 
       try {
+        // Always use the same endpoint but determine the logic based on parameters
         let endpoint = '/api/images';
         const params = new URLSearchParams();
 
+        // If we have a search query with minimum length, use search endpoint
         if (query && query.length >= 3) {
           endpoint = '/api/images/search';
           params.append('q', query);
         }
+
+        // Always add category_id if it exists (works for both search and regular endpoints)
         if (category_id) {
           params.append('category_id', category_id);
         }
+
         params.append('page', page.toString());
         params.append('limit', '20');
 
+        console.log('Fetching images with:', endpoint, params.toString());
+
         const res = await api.get(`${endpoint}?${params.toString()}`);
 
-        let pag = res.data.pagination || { total: 0, page: 1, limit: 20, pages: 1 };
-        let imgs = res.data.images || [];
+        console.log('API Response:', res.data); // Debug log to see what backend returns
 
-        // --- Show all images on one page if total < limit ---
-        if (pag.total <= pag.limit) {
-          pag.pages = 1;
-          pag.page = 1;
-          // If backend returns only part of images, fetch all for this case
-          if (imgs.length < pag.total) {
-            // Try to fetch all images (ignore pagination)
-            const allParams = new URLSearchParams(params);
-            allParams.set('page', '1');
-            allParams.set('limit', pag.total.toString());
-            const allRes = await api.get(`${endpoint}?${allParams.toString()}`);
-            imgs = allRes.data.images || imgs;
-          }
-        }
-
-        setImages(imgs);
-        setPagination(pag);
+        setImages(res.data.images || []);
+        setPagination(res.data.pagination || { total: 0, page: 1, limit: 20, pages: 1 });
       } catch (err) {
+        console.error('Error fetching images:', err.response ? err.response.data : err.message);
         setError('Failed to load images. Please try again later.');
         setImages([]);
         setPagination({ total: 0, page: 1, limit: 20, pages: 1 });
@@ -270,7 +262,7 @@ const GalleryPage = () => {
           <>
             <ImageGallery images={images} selectedCategoryId={category_id} />
 
-            {pagination.total > 0 && pagination.pages > 1 && (
+            {pagination.total > 0 && (
               <Pagination
                 currentPage={page}
                 totalPages={pagination.pages}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaImages } from "react-icons/fa";
 import api from "../utils/api";
@@ -167,9 +167,7 @@ const HomePage = () => {
                 to explore, contribute to, and celebrate the heritage of one of
                 Pakistan's oldest and most prestigious educational institutions.
               </p>
-              <Link to="/about">
-                <Button  variant="primary">Learn More</Button>
-              </Link>
+              
             </Col>
             <Col md={6}>
               <div className="p-5">

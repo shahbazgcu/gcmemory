@@ -1,15 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  Alert,
-  Spinner,
-  ProgressBar,
-} from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card, Alert, Spinner, ProgressBar } from "react-bootstrap";
 import { FaUpload, FaImage } from "react-icons/fa";
 import api from "../utils/api";
 import AuthContext from "../context/AuthContext";

@@ -152,7 +152,7 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
 
   return (
     <div className="edit-image">
-      <h2>Edit Image</h2>
+      {/* <h2>Edit Image</h2> */}
 
       {error && <Alert variant="danger">{error}</Alert>}
 
@@ -259,11 +259,11 @@ const EditImage = ({ image, onClose, onEditSuccess }) => {
                 'Save Changes'
               )}
             </Button>
-            {onClose && (
+            {/* {onClose && (
               <Button variant="secondary" onClick={onClose}>
                 Cancel
               </Button>
-            )}
+            )} */}
           </div>
         </Form>
       )}
