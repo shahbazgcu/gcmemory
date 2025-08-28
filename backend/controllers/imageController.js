@@ -8,9 +8,23 @@ exports.getAllImages = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const offset = (page - 1) * limit;
+    
+    // Add category filter support to getAllImages
+    const { category_id } = req.query;
+    let images, total;
 
-    const images = await Memory.getAll(limit, offset);
-    const total = await Memory.getTotal();
+    if (category_id) {
+      // If category_id is provided, use search method with category filter
+      const filters = { category_id };
+      images = await Memory.search(null, filters, limit, offset);
+      total = await Memory.getTotal(filters, null);
+    } else {
+      // No filters, get all images
+      images = await Memory.getAll(limit, offset);
+      total = await Memory.getTotal();
+    }
+
+    console.log(`Page: ${page}, Limit: ${limit}, Offset: ${offset}, Total: ${total}, Returned: ${images.length}`);
 
     res.status(200).json({
       images,
@@ -214,6 +228,8 @@ exports.searchImages = async (req, res) => {
 
     const images = await Memory.search(q, filters, limit, offset);
     const total = await Memory.getTotal(filters, q);
+
+    console.log(`Search - Page: ${page}, Limit: ${limit}, Offset: ${offset}, Total: ${total}, Returned: ${images.length}`);
 
     res.status(200).json({
       images,

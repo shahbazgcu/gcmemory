@@ -161,7 +161,6 @@ const GalleryPage = () => {
       setError(null);
 
       try {
-        // Always use the same endpoint but determine the logic based on parameters
         let endpoint = '/api/images';
         const params = new URLSearchParams();
 
@@ -171,7 +170,7 @@ const GalleryPage = () => {
           params.append('q', query);
         }
 
-        // Always add category_id if it exists (works for both search and regular endpoints)
+        // Always add category_id if it exists
         if (category_id) {
           params.append('category_id', category_id);
         }
@@ -180,13 +179,33 @@ const GalleryPage = () => {
         params.append('limit', '20');
 
         console.log('Fetching images with:', endpoint, params.toString());
+        console.log('Current page:', page, 'Expected offset:', (page - 1) * 20);
 
         const res = await api.get(`${endpoint}?${params.toString()}`);
+        console.log('API Response:', res.data);
 
-        console.log('API Response:', res.data); // Debug log to see what backend returns
+        let responseImages = res.data.images || [];
+        let responsePagination = res.data.pagination || { total: 0, page: 1, limit: 20, pages: 1 };
 
-        setImages(res.data.images || []);
-        setPagination(res.data.pagination || { total: 0, page: 1, limit: 20, pages: 1 });
+        // FRONTEND FIX: Recalculate pagination based on actual total and limit
+        const actualTotal = responsePagination.total || 0;
+        const actualLimit = responsePagination.limit || 20;
+        const calculatedPages = Math.ceil(actualTotal / actualLimit);
+        
+        // Override the pages calculation to ensure correct pagination
+        responsePagination.pages = calculatedPages;
+        
+        // If total images are less than or equal to limit, force everything on page 1
+        if (actualTotal <= actualLimit) {
+          responsePagination.pages = 1;
+          responsePagination.page = 1;
+        }
+
+        console.log('Corrected pagination:', responsePagination);
+
+        setImages(responseImages);
+        setPagination(responsePagination);
+
       } catch (err) {
         console.error('Error fetching images:', err.response ? err.response.data : err.message);
         setError('Failed to load images. Please try again later.');
@@ -223,22 +242,17 @@ const GalleryPage = () => {
       <Container>
         <div className="gallery-header">
           <h3>{buildPageTitle()}</h3>
-          {/* {pagination.total > 0 && (
+          {pagination.total > 0 && (
             <p className="text-muted">
-              Showing{' '}
-              {Math.min((page - 1) * pagination.limit + 1, pagination.total)} -{' '}
-              {Math.min(page * pagination.limit, pagination.total)} of {pagination.total} images
+              Total: {pagination.total} images 
+              {pagination.pages > 1 && (
+                <span>
+                  {' '}- Showing page {pagination.page} of {pagination.pages}
+                </span>
+              )}
             </p>
-          )} */}
+          )}
         </div>
-
-        {/* {categoryDetails && (
-          <div className="category-details my-3 p-3 border rounded bg-light">
-            <h2>{categoryDetails.name}</h2>
-            <p>{categoryDetails.description}</p>
-            <small>Created at: {new Date(categoryDetails.created_at).toLocaleDateString()}</small>
-          </div>
-        )} */}
 
         <SearchFilters
           onFilterChange={handleFilterChange}
@@ -262,7 +276,7 @@ const GalleryPage = () => {
           <>
             <ImageGallery images={images} selectedCategoryId={category_id} />
 
-            {pagination.total > 0 && (
+            {pagination.total > pagination.limit && pagination.pages > 1 && (
               <Pagination
                 currentPage={page}
                 totalPages={pagination.pages}

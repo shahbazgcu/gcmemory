@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   Container,
   Row,
@@ -22,7 +22,6 @@ const UploadPage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Form state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -43,7 +42,9 @@ const UploadPage = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [yearOptions, setYearOptions] = useState([]);
 
-  // Generate year options
+  // 🔹 Ref for clearing file input
+  const fileInputRef = useRef(null);
+
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const years = [];
@@ -53,7 +54,6 @@ const UploadPage = () => {
     setYearOptions(years);
   }, []);
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -67,7 +67,6 @@ const UploadPage = () => {
     fetchCategories();
   }, []);
 
-  // Handle input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -75,7 +74,6 @@ const UploadPage = () => {
     });
   };
 
-  // Handle file change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -98,7 +96,6 @@ const UploadPage = () => {
     }
   };
 
-  // Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -141,24 +138,29 @@ const UploadPage = () => {
       });
 
       toast.success("Image uploaded successfully ✅");
-      // navigate(`/images/${res.data.imageId}`, {
-      //   state: { message: "Image uploaded successfully." },
-      // });
+
+      // Reset form
       setFormData({
-  title: "",
-  description: "",
-  category_id: "",
-  year: "",
-  location: "",
-  department: "",
-  source: "",
-  keywords: "",
-});
-setImageFile(null);
-setPreviewUrl("");
-setValidated(false);
-setUploadProgress(0);
-setLoading(false);
+        title: "",
+        description: "",
+        category_id: "",
+        year: "",
+        location: "",
+        department: "",
+        source: "",
+        keywords: "",
+      });
+      setImageFile(null);
+      setPreviewUrl("");
+      setValidated(false);
+      setUploadProgress(0);
+      setLoading(false);
+
+      // 🔹 Clear file input manually
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
     } catch (err) {
       console.error("Error uploading image:", err);
       toast.error(
@@ -354,6 +356,7 @@ setLoading(false);
                           accept="image/*"
                           onChange={handleFileChange}
                           required
+                          ref={fileInputRef}  // 🔹 attach ref
                         />
                         <Form.Text className="text-muted">
                           Maximum file size: 3MB. Supported formats: JPEG, PNG, GIF
@@ -406,7 +409,6 @@ setLoading(false);
         </Row>
       </Container>
 
-      {/* Toast notifications */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

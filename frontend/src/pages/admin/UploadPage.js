@@ -1,5 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Container, Row, Col, Form, Button, Card, Alert, Spinner, ProgressBar } from "react-bootstrap";
+import React, { useState, useEffect, useContext, useRef } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Card,
+  Alert,
+  Spinner,
+  ProgressBar,
+} from "react-bootstrap";
 import { FaUpload, FaImage } from "react-icons/fa";
 import api from "../utils/api";
 import AuthContext from "../context/AuthContext";
@@ -28,6 +38,9 @@ const UploadPage = () => {
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [yearOptions, setYearOptions] = useState([]);
+
+  // 🔹 Ref for clearing file input
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -127,6 +140,7 @@ const UploadPage = () => {
 
       setSuccessMessage("Image uploaded successfully.");
 
+      // Reset form fields
       setFormData({
         title: "",
         description: "",
@@ -143,8 +157,10 @@ const UploadPage = () => {
       setUploadProgress(0);
       setLoading(false);
 
-      // Optional: auto-hide success after a few seconds
-      // setTimeout(() => setSuccessMessage(null), 3000);
+      // 🔹 Clear file input field
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
     } catch (err) {
       console.error("Error uploading image:", err);
@@ -332,6 +348,7 @@ const UploadPage = () => {
                           accept="image/*"
                           onChange={handleFileChange}
                           required
+                          ref={fileInputRef}   // 🔹 Ref added here
                         />
                         <Form.Text className="text-muted">
                           Maximum file size: 3MB. Supported formats: JPEG, PNG,
@@ -379,7 +396,6 @@ const UploadPage = () => {
                     </Button>
                   </div>
 
-                  {/* ✅ Success message displayed under the button */}
                   {successMessage && (
                     <Alert variant="success" className="mt-3">
                       {successMessage}
