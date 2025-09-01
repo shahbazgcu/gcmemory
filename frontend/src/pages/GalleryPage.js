@@ -108,11 +108,8 @@ const GalleryPage = () => {
     }
     const fetchCategoryDetails = async () => {
       try {
-        console.log('Fetching category details for category_id:', category_id);
         const res = await api.get(`/api/categories/${category_id}`);
         setCategoryDetails(res.data.category);
-        console.log(res.data)
-        console.log(res.data.category)
       } catch (error) {
         console.error('Failed to fetch category details:', error);
         setCategoryDetails(null);
@@ -178,11 +175,7 @@ const GalleryPage = () => {
         params.append('page', page.toString());
         params.append('limit', '20');
 
-        console.log('Fetching images with:', endpoint, params.toString());
-        console.log('Current page:', page, 'Expected offset:', (page - 1) * 20);
-
         const res = await api.get(`${endpoint}?${params.toString()}`);
-        console.log('API Response:', res.data);
 
         let responseImages = res.data.images || [];
         let responsePagination = res.data.pagination || { total: 0, page: 1, limit: 20, pages: 1 };
@@ -200,9 +193,6 @@ const GalleryPage = () => {
           responsePagination.pages = 1;
           responsePagination.page = 1;
         }
-
-        console.log('Corrected pagination:', responsePagination);
-
         setImages(responseImages);
         setPagination(responsePagination);
 

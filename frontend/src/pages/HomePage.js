@@ -26,15 +26,12 @@ const HomePage = () => {
 
         const images = responses.map((res) => {
           const image = res.data.image;
-          console.log("Raw image object:", image);
 
           return {
             id: image.id,
             url: `${baseUrl}${image.image_path}`, // ✅ Correct path
           };
         });
-
-        console.log("✅ Fetched Hero Images:", images);
         setHeroImages(images);
       } catch (error) {
         console.error("Error fetching hero images:", error);
