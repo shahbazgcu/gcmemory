@@ -24,7 +24,7 @@ exports.getAllImages = async (req, res) => {
       total = await Memory.getTotal();
     }
 
-    console.log(`Page: ${page}, Limit: ${limit}, Offset: ${offset}, Total: ${total}, Returned: ${images.length}`);
+
 
     res.status(200).json({
       images,
@@ -229,7 +229,6 @@ exports.searchImages = async (req, res) => {
     const images = await Memory.search(q, filters, limit, offset);
     const total = await Memory.getTotal(filters, q);
 
-    console.log(`Search - Page: ${page}, Limit: ${limit}, Offset: ${offset}, Total: ${total}, Returned: ${images.length}`);
 
     res.status(200).json({
       images,

@@ -15,10 +15,6 @@ class Category {
     );
 
     return rows.length ? rows[0] : null;
-    console.log(rows.length)
-    console.log(rows)
-    console.log(rows[0])
-
   }
 
   static async create(categoryData) {
