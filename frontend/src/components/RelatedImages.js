@@ -4,6 +4,7 @@ import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './RelatedImages.css';
 
+//npm install react-slick slick-carousel
 // Custom arrows with proper styling
 const NextArrow = ({ onClick }) => (
   <div className="slick-arrow slick-next" onClick={onClick}>
