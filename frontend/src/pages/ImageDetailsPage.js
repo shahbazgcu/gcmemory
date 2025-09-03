@@ -264,12 +264,12 @@ const handleDownload = async () => {
                   <hr />
                   
                   <div className="image-footer">
-                    <div className="upload-info">
+                    {/* <div className="upload-info">
                       {image.uploader_name && (
                         <span>Uploaded by {image.uploader_name}</span>
                       )}
                       <span>on {formatDate(image.created_at)}</span>
-                    </div>
+                    </div> */}
                     
                     <div className="image-actions-footer mt-3">
                       <Button 
