@@ -1,31 +1,29 @@
 :root {
   --color-accent: #b0b0b0;
-  /* muted medium gray */
   --color-red: #922121;
   --color-navy: #06014c;
   --color-muted-text: #666666;
   --color-light-bg: #f5f5f5;
-  /* light gray background */
   --color-shadow-light: rgba(6, 1, 76, 0.1);
   --color-shadow-dark: rgba(6, 1, 76, 0.15);
   --color-red-light-bg: rgba(146, 33, 33, 0.1);
 }
 
 .related-images {
-  margin-top: 2rem;
-  background-color: var(--color-light-bg);
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.related-images .related-title {
-  color: var(--color-red);
-  margin-bottom: 1rem;
-  font-weight: 600;
+  margin: 30px 0;
+  padding: 0 20px;
   position: relative;
 }
 
-.related-images .related-title::after {
+.related-heading {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #6c1b1b;
+  position: relative;
+}
+
+.related-heading::after {
   content: '';
   display: block;
   width: 50px;
@@ -35,39 +33,111 @@
   border-radius: 2px;
 }
 
-.related-row {
-  margin-left: -8px;
-  margin-right: -8px;
+/* Slick slider container */
+.slick-slider {
+  position: relative;
+  margin: 0 40px; /* Space for arrows */
 }
 
-.related-col {
-  padding: 8px;
-}
-
-.related-card {
-  border: none;
-  border-radius: 6px;
+.slick-list {
   overflow: hidden;
+}
+
+.slick-track {
+  display: flex !important;
+}
+
+.slick-slide {
+  height: inherit !important;
+  padding: 0 8px; /* Consistent spacing */
+}
+
+.slick-slide > div {
   height: 100%;
+}
+
+/* Remove default slick arrow content */
+.slick-prev:before,
+.slick-next:before {
+  display: none !important;
+}
+
+/* Custom Slick arrows - Fixed positioning and styling */
+.slick-prev,
+.slick-next {
+  width: 40px;
+  height: 40px;
+  z-index: 100 !important;
+  background-color: #000 !important; /* Force black background */
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  border: none;
+  outline: none;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: #333 !important;
+  transform: translateY(-50%) scale(1.1) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.slick-prev:focus,
+.slick-next:focus {
+  background-color: #000 !important;
+  outline: none;
+}
+
+.slick-prev {
+  left: -35px !important;
+}
+
+.slick-next {
+  right: -35px !important;
+}
+
+/* Ensure arrows are visible on all screen sizes */
+.slick-arrow {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Related card styling */
+.related-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 8px var(--color-shadow-light);
+  height: 280px; /* Fixed height for consistency */
   background-color: white;
+  border: none;
 }
 
 .related-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px var(--color-shadow-dark);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 .related-img-container {
-  height: 120px;
+  height: 200px; /* Fixed height for images */
   overflow: hidden;
-  border-radius: 6px 6px 0 0;
+  position: relative;
 }
 
 .related-img {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
@@ -77,30 +147,32 @@
 }
 
 .related-body {
-  padding: 0.75rem;
+  text-align: center;
+  padding: 15px 10px;
+  height: 80px; /* Fixed height for text area */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.related-body .related-title {
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-  white-space: nowrap;
+.related-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c1b1b;
+  margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--color-red);
-}
-
-.related-body .related-title::after {
-  display: none;
+  white-space: nowrap;
 }
 
 .related-year {
-  font-size: 0.8rem;
-  color: var(--color-red);
-  background-color: var(--color-red-light-bg);
-  display: inline-block;
-  padding: 1px 8px;
-  border-radius: 10px;
+  background: #f5e0e0;
+  color: #6c1b1b;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: 600;
+  display: inline-block;
 }
 
 .related-link {
@@ -110,25 +182,76 @@
   height: 100%;
 }
 
-@media (max-width: 767px) {
-  .related-row {
-    margin-left: -5px;
-    margin-right: -5px;
+/* Mobile responsiveness */
+@media (max-width: 1200px) {
+  .slick-slider {
+    margin: 0 35px;
   }
-
-  .related-col {
-    padding: 5px;
+  
+  .slick-prev {
+    left: -30px !important;
   }
+  
+  .slick-next {
+    right: -30px !important;
+  }
+}
 
+@media (max-width: 768px) {
+  .related-images {
+    padding: 0 15px;
+  }
+  
+  .slick-slider {
+    margin: 0 30px;
+  }
+  
+  .slick-prev,
+  .slick-next {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .slick-prev {
+    left: -25px !important;
+  }
+  
+  .slick-next {
+    right: -25px !important;
+  }
+  
+  .related-card {
+    height: 250px;
+  }
+  
   .related-img-container {
-    height: 100px;
+    height: 170px;
   }
-
+  
   .related-body {
-    padding: 0.5rem;
+    height: 80px;
+    padding: 10px 8px;
   }
+}
 
-  .related-body .related-title {
-    font-size: 0.8rem;
+@media (max-width: 576px) {
+  .slick-slider {
+    margin: 0 25px;
+  }
+  
+  .slick-prev {
+    left: -20px !important;
+  }
+  
+  .slick-next {
+    right: -20px !important;
+  }
+  
+  .slick-prev,
+  .slick-next {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
