@@ -62,19 +62,19 @@
   display: none !important;
 }
 
-/* Custom Slick arrows - Fixed positioning and styling */
+/* Custom Slick arrows - Updated with proper arrow shapes */
 .slick-prev,
 .slick-next {
   width: 40px;
   height: 40px;
   z-index: 100 !important;
-  background-color: #000 !important; /* Force black background */
+  background-color: rgba(0, 0, 0, 0.7) !important;
   border-radius: 50%;
   display: flex !important;
   align-items: center;
   justify-content: center;
   color: white !important;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -88,14 +88,14 @@
 
 .slick-prev:hover,
 .slick-next:hover {
-  background-color: #333 !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
   transform: translateY(-50%) scale(1.1) !important;
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .slick-prev:focus,
 .slick-next:focus {
-  background-color: #000 !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
   outline: none;
 }
 
@@ -107,13 +107,36 @@
   right: -35px !important;
 }
 
+/* Create proper arrow shapes using CSS borders */
+.slick-prev::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid white;
+  margin-left: -2px;
+}
+
+.slick-next::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid white;
+  margin-right: -2px;
+}
+
 /* Ensure arrows are visible on all screen sizes */
 .slick-arrow {
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-/* Related card styling */
+/* Related card styling - Updated to remove white borders */
 .related-card {
   border-radius: 12px;
   overflow: hidden;
@@ -121,7 +144,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 280px; /* Fixed height for consistency */
   background-color: white;
-  border: none;
+  border: none !important; /* Explicitly remove any border */
 }
 
 .related-card:hover {
@@ -130,22 +153,24 @@
 }
 
 .related-img-container {
-  height: 200px; /* Fixed height for images */
+  height: 280px; /* Full height since we removed card body */
   overflow: hidden;
   position: relative;
   background-color: #f8f9fa;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 12px; /* Match card border radius */
 }
 
 .related-img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain; /* Changed from cover to contain */
+  object-fit: cover; /* Changed back to cover for better visual consistency */
   object-position: center;
   transition: transform 0.5s ease;
   background-color: transparent;
+  border-radius: 12px; /* Ensure image follows container border radius */
 }
 
 /* Alternative styling for better image fitting */
@@ -234,6 +259,18 @@
     font-size: 16px;
   }
   
+  .slick-prev::after {
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 7px solid white;
+  }
+  
+  .slick-next::after {
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid white;
+  }
+  
   .slick-prev {
     left: -25px !important;
   }
@@ -247,7 +284,7 @@
   }
   
   .related-img-container {
-    height: 170px;
+    height: 250px;
   }
   
   .related-body {
@@ -274,5 +311,17 @@
     width: 32px;
     height: 32px;
     font-size: 14px;
+  }
+  
+  .slick-prev::after {
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right: 6px solid white;
+  }
+  
+  .slick-next::after {
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid white;
   }
 }

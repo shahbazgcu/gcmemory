@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button, Spinner, Alert, Badge, Card } from 'react-bootstrap';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FaDownload, FaEdit, FaTrashAlt, FaExpandAlt, FaCalendarAlt, FaMapMarkerAlt, FaBuilding } from 'react-icons/fa';
-import api from '../../utils/api';
-import AuthContext from '../../context/AuthContext';
-import RelatedImages from '../../components/RelatedImages';
-import ImageLightbox from '../../components/ImageLightbox';
+import { FaDownload, FaEdit, FaTrashAlt, FaExpandAlt, FaCalendarAlt, FaMapMarkerAlt, FaBuilding, FaSearchPlus } from 'react-icons/fa';
+import api from '../utils/api';
+import AuthContext from '../context/AuthContext';
+import RelatedImages from '../components/RelatedImages';
+import ImageLightbox from '../components/ImageLightbox';
 import './ImageDetailsPage.css';
 import { Toast, ToastContainer } from 'react-bootstrap';
 
@@ -165,13 +165,16 @@ const handleDownload = async () => {
             <Col lg={8}>
               <div className="image-main-container">
                 <div className="image-actions">
-                  <Button 
-                    variant="light" 
-                    className="zoom-btn"
+                  <button 
+                    className="modern-zoom-btn"
                     onClick={() => setShowLightbox(true)}
+                    title="View fullscreen"
                   >
-                    <FaExpandAlt />
-                  </Button>
+                    <div className="zoom-icon-wrapper">
+                      <FaSearchPlus className="zoom-icon" />
+                    </div>
+                    <div className="zoom-ripple"></div>
+                  </button>
                 </div>
                 <img 
                   src={process.env.REACT_APP_API_URL + image.image_path} 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col, Carousel } from 'react-bootstrap';
-import { FaDownload, FaArrowLeft, FaArrowRight, FaTimesCircle } from 'react-icons/fa';
+import { FaDownload, FaArrowLeft, FaArrowRight, FaTimesCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './ImageLightbox.css';
 
 const ImageLightbox = ({ show, onHide, image, relatedImages = [] }) => {
@@ -21,6 +21,18 @@ const ImageLightbox = ({ show, onHide, image, relatedImages = [] }) => {
   // Handle image navigation
   const handleSelect = (selectedIndex) => {
     setCurrentIndex(selectedIndex);
+  };
+
+  // Navigate to previous image
+  const handlePrevious = () => {
+    const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+  };
+
+  // Navigate to next image
+  const handleNext = () => {
+    const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
   };
 
   // Handle download
@@ -54,16 +66,35 @@ const ImageLightbox = ({ show, onHide, image, relatedImages = [] }) => {
         {/* <Modal.Title>{currentImage?.title}</Modal.Title> */}
       </Modal.Header>
       
-      <Modal.Body className="p-0 bg-dark text-white">
+      <Modal.Body className="p-0 bg-dark text-white position-relative">
+        {/* Custom Navigation Arrows */}
+        {images.length > 1 && (
+          <>
+            <button 
+              className="custom-carousel-arrow custom-carousel-prev"
+              onClick={handlePrevious}
+              aria-label="Previous image"
+            >
+              <FaChevronLeft />
+            </button>
+            
+            <button 
+              className="custom-carousel-arrow custom-carousel-next"
+              onClick={handleNext}
+              aria-label="Next image"
+            >
+              <FaChevronRight />
+            </button>
+          </>
+        )}
+
         <Carousel 
           activeIndex={currentIndex}
           onSelect={handleSelect}
           interval={null}
           indicators={false}
-          controls={images.length > 1}
+          controls={false} // Disable default controls since we're using custom ones
           className="lightbox-carousel"
-          prevIcon={<FaArrowLeft className="carousel-arrow" />}
-          nextIcon={<FaArrowRight className="carousel-arrow" />}
         >
           {images.map((img) => (
             <Carousel.Item key={img.id}>
@@ -81,6 +112,13 @@ const ImageLightbox = ({ show, onHide, image, relatedImages = [] }) => {
             </Carousel.Item>
           ))}
         </Carousel>
+
+        {/* Image counter */}
+        {images.length > 1 && (
+          <div className="image-counter">
+            {currentIndex + 1} / {images.length}
+          </div>
+        )}
       </Modal.Body>
       
       <Modal.Footer className="border-0 bg-dark text-white">

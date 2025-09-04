@@ -5,17 +5,14 @@ import { Link } from 'react-router-dom';
 import './RelatedImages.css';
 
 //npm install react-slick slick-carousel
-// Custom arrows with proper styling
+
+// Custom arrows with proper arrow shapes (no text content needed since CSS handles the arrows)
 const NextArrow = ({ onClick }) => (
-  <div className="slick-arrow slick-next" onClick={onClick}>
-    ❯
-  </div>
+  <div className="slick-arrow slick-next" onClick={onClick}></div>
 );
 
 const PrevArrow = ({ onClick }) => (
-  <div className="slick-arrow slick-prev" onClick={onClick}>
-    ❮
-  </div>
+  <div className="slick-arrow slick-prev" onClick={onClick}></div>
 );
 
 const RelatedImages = ({ images, currentImageId }) => {
@@ -107,10 +104,7 @@ const RelatedImages = ({ images, currentImageId }) => {
                       }}
                     />
                   </div>
-                  {/* <Card.Body className="related-body">
-                    <Card.Title className="related-title">{image.title}</Card.Title>
-                    {image.year && <div className="related-year">{image.year}</div>}
-                  </Card.Body> */}
+                  {/* Card body removed to eliminate white borders and use full image */}
                 </Card>
               </Link>
             </div>
