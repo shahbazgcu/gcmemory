@@ -153,7 +153,7 @@ const AdminImages = () => {
                 </Form.Select>
               </Form.Group>
             </Col>
-            <Col md={3}>
+            {/* <Col md={3}>
               <Form.Group className="mb-3" controlId="yearFilter">
                 <Form.Control
                   type="number"
@@ -165,7 +165,7 @@ const AdminImages = () => {
                   max={new Date().getFullYear()}
                 />
               </Form.Group>
-            </Col>
+            </Col> */}
             <Col md={2}>
               <Button 
                 variant="primary" 
