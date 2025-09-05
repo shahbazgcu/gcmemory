@@ -94,15 +94,6 @@ const AdminDashboard = () => {
                   <FaFolderOpen className="me-2" /> Categories
                 </Nav.Link>
               </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  as={Link}
-                  to="/admin/users"
-                  className={getActiveKey() === 'users' ? 'active' : ''}
-                >
-                  <FaUsers className="me-2" /> Users
-                </Nav.Link>
-              </Nav.Item>
             </Nav>
           </Col>
 
