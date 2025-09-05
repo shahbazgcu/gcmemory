@@ -22,8 +22,8 @@
 }
 
 /* slick carousel css */
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 
 
 * {
@@ -68,7 +68,7 @@ a:hover {
   background: var(--color-red);
 }
 
-/* Sexy gradient background for different types */
+/* gradient background for different types */
 .custom-toast.bg-success {
   background: linear-gradient(135deg, #00c853, #64dd17);
   color: #fff !important;
