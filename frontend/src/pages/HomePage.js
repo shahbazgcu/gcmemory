@@ -29,7 +29,7 @@ const HomePage = () => {
 
           return {
             id: image.id,
-            url: `${baseUrl}${image.image_path}`, // ✅ Correct path
+            url: `${baseUrl}${image.image_path}`, 
           };
         });
         setHeroImages(images);

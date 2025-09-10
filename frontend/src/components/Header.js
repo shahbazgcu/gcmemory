@@ -17,8 +17,13 @@ const Header = () => {
           <img 
             src={logo} 
             alt="GCU Memories" 
-            height="50" 
-            className="d-inline-block align-top me-2" 
+            className="d-inline-block align-top me-2 img-fluid"
+            style={{
+              height: 'auto',
+              maxHeight: '60px',
+              width: 'auto',
+              maxWidth: '290px'
+            }}
           />
           {/* <span className="fw-bold text-primary">GCU Memories</span> */}
         </Navbar.Brand>
