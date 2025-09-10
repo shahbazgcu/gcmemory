@@ -60,7 +60,7 @@ const Header = () => {
                 } 
                 id="user-dropdown"
               >
-                <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profile">Change Your Password</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={logout}>
                   <FaSignOutAlt className="me-1" /> Logout
