@@ -21,7 +21,7 @@ import {
 } from "react-icons/fa";
 import api from "../utils/api";
 import AuthContext from "../context/AuthContext";
-import RelatedImages from "../components/RelatedImages";
+// import RelatedImages from "../components/RelatedImages";
 import ImageLightbox from "../components/ImageLightbox";
 import "./ImageDetailsPage.css";
 import { Toast, ToastContainer } from "react-bootstrap";
@@ -44,7 +44,7 @@ const ImageDetailsPage = () => {
   const { user, isAuthenticated } = useContext(AuthContext);
 
   const [image, setImage] = useState(null);
-  const [relatedImages, setRelatedImages] = useState([]);
+  // const [relatedImages, setRelatedImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showLightbox, setShowLightbox] = useState(false);
@@ -68,8 +68,8 @@ const ImageDetailsPage = () => {
         setImage(imageRes.data.image);
 
         // Fetch related images
-        const relatedRes = await api.get(`/api/images/${id}/related`);
-        setRelatedImages(relatedRes.data.relatedImages);
+        // const relatedRes = await api.get(`/api/images/${id}/related`);
+        // setRelatedImages(relatedRes.data.relatedImages);
       } catch (err) {
         console.error("Error fetching image details:", err);
         setError("Failed to load image details. Please try again later.");
@@ -352,7 +352,7 @@ const ImageDetailsPage = () => {
         </div>
 
         {/* Related Images Section */}
-        <RelatedImages images={relatedImages} currentImageId={image.id} />
+        {/* <RelatedImages images={relatedImages} currentImageId={image.id} /> */}
       </Container>
 
       {/* Lightbox Modal */}
@@ -360,7 +360,7 @@ const ImageDetailsPage = () => {
         show={showLightbox}
         onHide={() => setShowLightbox(false)}
         image={image}
-        relatedImages={relatedImages}
+        // relatedImages={relatedImages}
       />
     </div>
   );

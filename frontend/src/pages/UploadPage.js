@@ -253,12 +253,12 @@ const UploadPage = () => {
 
                         <Col md={6}>
                           <Form.Group className="mb-3" controlId="year">
-                            <Form.Label>Year *</Form.Label>
+                            <Form.Label>Year</Form.Label>
                             <Form.Select
                               name="year"
                               value={formData.year}
                               onChange={handleChange}
-                              required
+                              
                             >
                               <option value="">Select year</option>
                               {yearOptions.map((year) => (

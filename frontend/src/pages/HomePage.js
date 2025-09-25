@@ -104,7 +104,7 @@ const HomePage = () => {
       <section className="featured-section">
         <Container>
           <div className="section-header">
-            <h2 className="section-title">Recent Memories</h2>
+            <h2 className="section-title">Recent Uploaded Memories</h2>
             <Link to="/gallery" className="view-all">
               View All <FaImages className="ms-1" />
             </Link>
@@ -125,7 +125,7 @@ const HomePage = () => {
       {/* Categories Section */}
       <section className="categories-section">
         <Container>
-          <h2 className="section-title">Browse by Category</h2>
+          <h2 className="section-title">Browse by Album</h2>
           <Row>
             {categories.map((category) => (
               <Col key={category.id} md={4} lg={3} className="mb-4">

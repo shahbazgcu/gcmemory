@@ -13,11 +13,11 @@ const Header = () => {
   return (
     <Navbar bg="light" expand="lg" fixed="top" className="shadow-sm">
       <Container>
-        <Navbar.Brand as={Link} to={logoLink} className="logo">
+        <Navbar.Brand as={Link} to={logoLink} className="logo me-auto">
           <img 
             src={logo} 
             alt="GCU Memories" 
-            className="d-inline-block align-top me-2 img-fluid"
+            className="d-inline-block align-top me-2 img-fluid d-none d-sm-inline"
             style={{
               height: 'auto',
               maxHeight: '60px',
@@ -25,18 +25,29 @@ const Header = () => {
               maxWidth: '290px'
             }}
           />
+          <img 
+            src={logo} 
+            alt="GCU Memories" 
+            className="d-inline-block align-top me-2 img-fluid d-inline d-sm-none"
+            style={{
+              height: 'auto',
+              maxHeight: '45px',
+              width: 'auto',
+              maxWidth: '250px'
+            }}
+          />
           {/* <span className="fw-bold text-primary">GCU Memories</span> */}
         </Navbar.Brand>
         
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="ms-auto mb-2 mb-lg-0">
              {/* Only show Gallery link if NOT admin */}
               {user?.role !== 'admin' && (
                 <>  
-              <Nav.Link as={NavLink} to="/" className="mx-2">Home</Nav.Link>
-             <Nav.Link as={NavLink} to="/about" className="mx-2">About</Nav.Link>
-             <Nav.Link as={NavLink} to="/gallery" className="mx-2">Gallery</Nav.Link>
+              <Nav.Link as={NavLink} to="/" className="mx-2 px-3">Home</Nav.Link>
+             <Nav.Link as={NavLink} to="/about" className="mx-2 px-3">About</Nav.Link>
+             <Nav.Link as={NavLink} to="/gallery" className="mx-2 px-3">Gallery</Nav.Link>
              </>
               )}
 
@@ -45,20 +56,19 @@ const Header = () => {
                 <FaUpload className="me-1" /> Upload
               </Nav.Link>
             )} */}
-            
-          </Nav>
 
-          {/* Search bar removed here */}
-
-          <Nav>
             {isAuthenticated ? (
               <NavDropdown 
                 title={
                   <span>
-                    <FaUser className="me-1" /> {user.name}
+                    <FaUser className="me-1" /> 
+                    <span className="d-none d-md-inline">{user.name}</span>
+                    <span className="d-inline d-md-none">Menu</span>
                   </span>
                 } 
                 id="user-dropdown"
+                align="end"
+                className="dropdown-menu-end"
               >
                 <NavDropdown.Item as={Link} to="/profile">Change Your Password</NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -76,6 +86,7 @@ const Header = () => {
                 </Nav.Link> */}
               </>
             )}
+            
           </Nav>
         </Navbar.Collapse>
       </Container>
